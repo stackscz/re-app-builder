@@ -34,9 +34,11 @@ Here is `index.html` 7-liner
 
 ### Building project
 
-Add following script to your package.json
+Add following script section entry to your package.json
 
-    "ab": "node ./node_modules/@stackscz/webpack-configs/app-builder"    
+    ...
+    "ab": "node ./node_modules/@stackscz/re-app-builder"
+    ...
 
 so you can run following commands 
 
