@@ -35,19 +35,19 @@ devConfig[path.join(__dirname, './base')] = function (config) {
 		}
 	});
 
+	// TODO https://github.com/stackscz/re-app-builder/issues/1
+	/*
 	config.module.loaders.unshift({
 		test: /\.(js|jsx)$/,
 		loader: 'react-hot',
 		include: [here('src'), here('examples'), here('apps')]
 	});
-	//_.find(config.module.loaders, {test: /\.(js|jsx)$/}).loaders.unshift('react-hot');
-
+	*/
 
 	return config;
 };
 
 var config = module.exports = new WebpackConfig().extend(devConfig).merge({
-	//entry: entry,
 	//cache: true,
 	//devtool: 'eval',
 	plugins: [
@@ -56,15 +56,6 @@ var config = module.exports = new WebpackConfig().extend(devConfig).merge({
 	],
 	output: {
 		publicPath: 'http://127.0.0.1:8080/'
-	},
-	module: {
-		loaders: [
-			//{
-			//	test: /\.(js|jsx)$/,
-			//	loader: 'react-hot',
-			//	include: [here('src'), here('examples')]
-			//}
-		]
 	}
 });
 
