@@ -86,12 +86,14 @@ forAllApps(function (appName, appRootPath) {
 				} catch (e) {
 				}
 			});
-			_.each(config.entry, function (entry, key) {
-				if (_.isArray(entry)) {
-					config.entry[key].unshift(localModule('webpack/hot/only-dev-server'));
-					config.entry[key].unshift(localModule('webpack-dev-server/client?http://' + ip + ':' + port));
-				}
-			});
+			if (isDevServer) {
+				_.each(config.entry, function (entry, key) {
+					if (_.isArray(entry)) {
+						config.entry[key].unshift(localModule('webpack/hot/only-dev-server'));
+						config.entry[key].unshift(localModule('webpack-dev-server/client?http://' + ip + ':' + port));
+					}
+				});
+			}
 
 			[
 				'actions',
