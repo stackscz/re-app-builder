@@ -19,13 +19,7 @@ try {
 }
 
 module.exports = config.merge({
-	resolve: {
-		//modulesDirectories: [here('node_modules'), path.join(__dirname, "..", "node_modules")],
-		//root: here('node_modules'),
-		//fallback: here('node_modules')
-	},
 	resolveLoader: {
-		//root: path.join(__dirname, "..", "node_modules"),
 		fallback: path.join(__dirname, "..", "node_modules")
 	},
 	plugins: [
@@ -75,6 +69,3 @@ module.exports = config.merge({
 		]
 	}
 });
-
-//console.log(webpack_isomorphic_tools_plugin.regular_expression('fonts'));
-//process.exit();
