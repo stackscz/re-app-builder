@@ -13,6 +13,8 @@ Enables your `react` ES6 web project to be built with `webpack` out of the box w
 
 ### Project structure
 
+**Create this structure:**
+
 - `src` folder holds all your project source files, `re-app-builder` looks for `index.js` as entry point
 - `examples` folder holds all your project examples source files (optional)
 - `public` folder contains static assets served by webpack-dev-server, namely `index.html` of your app (optional)
