@@ -7,7 +7,7 @@ Enables your `react` ES6 web project to be built with `webpack` out of the box w
 `cd` into your clean project directory and run
 
     npm init
-    npm i -S https://github.com/stackscz/re-app-builder
+    npm i -S re-app-builder
 
 ## Usage
 
@@ -37,7 +37,7 @@ Here is `index.html` 7-liner
 Add following script section entry to your package.json
 
     ...
-    "ab": "node ./node_modules/@stackscz/re-app-builder"
+    "ab": "node ./node_modules/re-app-builder"
     ...
 
 so you can run following commands 
