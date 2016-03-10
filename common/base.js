@@ -19,6 +19,9 @@ try {
 }
 
 module.exports = config.merge({
+	resolve: {
+		root: here('node_modules')
+	},
 	resolveLoader: {
 		fallback: path.join(__dirname, "..", "node_modules")
 	},
