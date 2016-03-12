@@ -3,7 +3,6 @@ var path = require('path');
 var join = path.join;
 var webpack = require('webpack');
 var WebpackConfig = require('webpack-config');
-var localModule = require('../utils/localModule');
 var here = require('../utils/here');
 
 var srcPath = here('src');
@@ -58,7 +57,7 @@ module.exports = new WebpackConfig()
 			preLoaders: [
 				{
 					test: /\/(components|containers)\/.+\.(js|jsx)$/,
-					loader: localModule('baggage-loader?index.less'),
+					loader: 'baggage-loader?index.less',
 					include: [here('src'), here('examples'), here('apps')]
 				}
 			],
@@ -69,11 +68,14 @@ module.exports = new WebpackConfig()
 					include: [here('src'), here('examples'), here('apps')],
 					query: {
 						presets: [
-							localModule('babel-preset-es2015'),
-							localModule('babel-preset-react'),
-							localModule('babel-preset-stage-0')
+							'es2015',
+							'react',
+							'stage-0'
 						],
-						plugins: [localModule('babel-plugin-transform-decorators-legacy')]
+						plugins: [
+							'transform-decorators-legacy',
+							'transform-runtime'
+						]
 					}
 				}
 			]
