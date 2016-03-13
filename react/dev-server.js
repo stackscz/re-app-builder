@@ -4,7 +4,6 @@ var path = require('path');
 var webpack = require('webpack');
 var WebpackConfig = require('webpack-config');
 var here = require('../utils/here');
-var localModule = require('../utils/localModule');
 //var rmdir = require('rimraf');
 //var WebpackDevServer = require('webpack-dev-server');
 
@@ -30,8 +29,8 @@ var devConfig = {};
 devConfig[path.join(__dirname, './base')] = function (config) {
 	_.each(config.entry, function (entry, key) {
 		if (_.isArray(entry)) {
-			config.entry[key].unshift(localModule('webpack/hot/only-dev-server'));
-			config.entry[key].unshift(localModule('webpack-dev-server/client?http://' + ip + ':' + port));
+			config.entry[key].unshift('webpack/hot/only-dev-server');
+			config.entry[key].unshift('webpack-dev-server/client?http://' + ip + ':' + port);
 		}
 	});
 

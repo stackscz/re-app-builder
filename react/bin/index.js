@@ -3,7 +3,6 @@ var fs = require("fs");
 var webpack = require("webpack");
 var path = require("path");
 var here = require("../../utils/here");
-var localModule = require('../../utils/localModule');
 var WebpackDevServer = require('webpack-dev-server');
 
 var port = 8080;
@@ -89,8 +88,8 @@ forAllApps(function (appName, appRootPath) {
 			if (isDevServer) {
 				_.each(config.entry, function (entry, key) {
 					if (_.isArray(entry)) {
-						config.entry[key].unshift(localModule('webpack/hot/only-dev-server'));
-						config.entry[key].unshift(localModule('webpack-dev-server/client?http://' + ip + ':' + port));
+						config.entry[key].unshift('webpack/hot/only-dev-server');
+						config.entry[key].unshift('webpack-dev-server/client?http://' + ip + ':' + port);
 					}
 				});
 			}
