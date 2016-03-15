@@ -39,7 +39,7 @@ module.exports = config.merge({
 		loaders: [
 			{
 				test: /\.json$/,
-				loader: 'raw!json',
+				loader: 'json',
 			},
 			{
 				test: /\.css$/,
