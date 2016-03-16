@@ -1,6 +1,6 @@
 {
   "name": "re-app-builder",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Webpack build tools for react",
   "main": "index.js",
   "scripts": {},
@@ -9,7 +9,6 @@
   "repository": "https://github.com/stackscz/re-app-builder",
   "dependencies": {
     "babel": "^6.5.2",
-    "babel-cli": "^6.6.5",
     "babel-core": "^6.1.21",
     "babel-eslint": "^4.1.6",
     "babel-loader": "^6.2.4",
