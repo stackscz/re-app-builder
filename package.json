@@ -1,6 +1,6 @@
 {
   "name": "re-app-builder",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "Webpack build tools for react",
   "main": "index.js",
   "scripts": {},
