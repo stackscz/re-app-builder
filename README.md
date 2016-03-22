@@ -18,11 +18,7 @@ Enables your `react` ES6 web project to be built with `webpack` out of the box w
 - `public` folder contains static assets served by webpack-dev-server, namely `index.html` of your app (optional)
 - `lib` folder is automatically created during build, it's content is also served by webpack-dev-server so there might be conflicts with files `public` folder if you let that to happen 
 
-Additionally, `apps` folder can be created to host multiple experimental apps separately. 
-Those should have same structure as described above. 
-For example `apps/myapp/src` contains sources of `myapp`.
-
-Here is `index.html` 7-liner
+Here is friendly `index.html` 7-liner
 
     <!DOCTYPE html>
     <html>

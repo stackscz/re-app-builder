@@ -25,8 +25,12 @@ try {
 }
 
 
-var devConfig = {};
-devConfig[path.join(__dirname, './base')] = function (config) {
+var baseConfigs = require(path.join(__dirname, './base'));
+
+module.exports = baseConfigs.map(function (baseConfig) {
+
+	var config = new WebpackConfig().merge(baseConfig);
+
 	_.each(config.entry, function (entry, key) {
 		if (_.isArray(entry)) {
 			config.entry[key].unshift('webpack/hot/only-dev-server');
@@ -36,28 +40,28 @@ devConfig[path.join(__dirname, './base')] = function (config) {
 
 	// TODO https://github.com/stackscz/re-app-builder/issues/1
 	/*
-	config.module.loaders.unshift({
-		test: /\.(js|jsx)$/,
-		loader: 'react-hot',
-		include: [here('src'), here('examples'), here('apps')]
+	 config.module.loaders.unshift({
+	 test: /\.(js|jsx)$/,
+	 loader: 'react-hot',
+	 include: [here('src'), here('examples'), here('apps')]
+	 });
+	 */
+
+	config.merge({
+		//cache: true,
+		//devtool: 'eval',
+		plugins: [
+			new webpack.HotModuleReplacementPlugin(),
+			new webpack.NoErrorsPlugin()
+		],
+		output: {
+			publicPath: 'http://127.0.0.1:8080/'
+		}
 	});
-	*/
 
-	return config;
-};
+	return config.toObject();
 
-var config = module.exports = new WebpackConfig().extend(devConfig).merge({
-	//cache: true,
-	//devtool: 'eval',
-	plugins: [
-		new webpack.HotModuleReplacementPlugin(),
-		new webpack.NoErrorsPlugin()
-	],
-	output: {
-		publicPath: 'http://127.0.0.1:8080/'
-	}
 });
-
 
 // cleanup build directory
 //rmdir(config.output.path, function (error) {
@@ -74,6 +78,3 @@ var config = module.exports = new WebpackConfig().extend(devConfig).merge({
 //		console.log('Listening at ' + ip + ':' + port);
 //	});
 //});
-
-//console.log(config);
-//process.exit();

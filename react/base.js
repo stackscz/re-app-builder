@@ -7,33 +7,35 @@ var here = require('../utils/here');
 
 var srcPath = here('src');
 
-var config = {};
-config[join(__dirname, '../common/base')] = function (config) {
+var baseConfigs = require(join(__dirname, '../common/base'));
 
-	var knownModuleSpaces = {
-		'examples/index': './examples',
-		'app/index': './public',
-		index: './src'
-	};
-	_.each(knownModuleSpaces, function (moduleName, outputPath) {
-		var modulePath = here(moduleName);
-		try {
-			require.resolve(modulePath);
-			console.error('module space "' + modulePath + '" present!');
-			if (!config.entry) {
-				config.entry = {};
+module.exports = baseConfigs.map(function (baseConfig) {
+
+	var config = new WebpackConfig().merge(baseConfig);
+
+	if (config.useDefaultEntryPoints !== false) {
+		var knownModuleSpaces = {
+			'examples/index': './examples',
+			'app/index': './public',
+			index: './src'
+		};
+		_.each(knownModuleSpaces, function (moduleName, outputPath) {
+			var modulePath = here(moduleName);
+			try {
+				require.resolve(modulePath);
+				console.error('module space "' + modulePath + '" present!');
+				if (!config.entry) {
+					config.entry = {};
+				}
+				if (!config.entry[outputPath]) {
+					config.entry[outputPath] = [moduleName];
+				}
+			} catch (e) {
 			}
-			config.entry[outputPath] = [moduleName];
-		} catch (e) {
-		}
-	});
+		});
+	}
 
-	return config;
-};
-
-
-module.exports = new WebpackConfig()
-	.merge({
+	config.merge({
 		resolve: {
 			extensions: ['', '.js', '.jsx'],
 			alias: {
@@ -43,9 +45,7 @@ module.exports = new WebpackConfig()
 				containers: join(srcPath, 'containers'),
 				store: join(srcPath, 'store'),
 				styles: join(srcPath, 'styles'),
-				utils: join(srcPath, 'utils'),
-				//react: here('node_modules/react'),
-				//config: join(srcPath, 'config')
+				utils: join(srcPath, 'utils')
 			}
 		},
 		output: {
@@ -83,5 +83,6 @@ module.exports = new WebpackConfig()
 		eslint: {
 			configFile: path.join(__dirname, '.eslintrc.js')
 		}
-	})
-	.extend(config);
+	});
+	return config.toObject();
+});

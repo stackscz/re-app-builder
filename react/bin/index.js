@@ -52,64 +52,53 @@ forAllApps(function (appName, appRootPath) {
 
 		var config = require(configPath);
 
-		//var configEdit = {};
-		//if (isDevServer) {
-		//	configEdit[path.join(__dirname, '../dev-server')] = function (config) {
-		//		config.devServer && (config.devServer.contentBase = path.join(appRootPath, 'public'));
-		//		//console.log(config.devServer);
-		//		return config;
+		// TODO fix multiple apps feature
+		//var configEdit = function (config) {
+		//	config.output.path = path.join(appRootPath, 'lib');
+		//
+		//	var knownModuleSpaces = {
+		//		'examples/index': path.join(appRootPath, 'examples'),
+		//		'app/index': path.join(appRootPath, 'public'),
+		//		index: path.join(appRootPath, 'src')
 		//	};
-		//}
-		//config = config.extend(configEdit);
-
-		//console.log(config);
-
-		var configEdit = function (config) {
-			config.output.path = path.join(appRootPath, 'lib');
-
-			var knownModuleSpaces = {
-				'examples/index': path.join(appRootPath, 'examples'),
-				'app/index': path.join(appRootPath, 'public'),
-				index: path.join(appRootPath, 'src')
-			};
-			_.each(knownModuleSpaces, function (moduleName, outputPath) {
-				//var modulePath = path.join(appRootPath, moduleName);
-				var modulePath = moduleName;
-				try {
-					require.resolve(modulePath);
-					console.error('module space "' + modulePath + '" present!');
-					if (!config.entry) {
-						config.entry = {};
-					}
-					config.entry[outputPath] = [moduleName];
-				} catch (e) {
-				}
-			});
-			if (isDevServer) {
-				_.each(config.entry, function (entry, key) {
-					if (_.isArray(entry)) {
-						config.entry[key].unshift('webpack/hot/only-dev-server');
-						config.entry[key].unshift('webpack-dev-server/client?http://' + ip + ':' + port);
-					}
-				});
-			}
-
-			[
-				'actions',
-				'reducers',
-				'components',
-				'containers',
-				'store',
-				'styles',
-				'utils',
-			].map(function (group) {
-				config.resolve.alias[group] = path.join(appRootPath, 'src', group)
-			});
-
-
-			return config;
-		};
-		config = configEdit(config);
+		//	_.each(knownModuleSpaces, function (moduleName, outputPath) {
+		//		//var modulePath = path.join(appRootPath, moduleName);
+		//		var modulePath = moduleName;
+		//		try {
+		//			require.resolve(modulePath);
+		//			console.error('module space "' + modulePath + '" present!');
+		//			if (!config.entry) {
+		//				config.entry = {};
+		//			}
+		//			config.entry[outputPath] = [moduleName];
+		//		} catch (e) {
+		//		}
+		//	});
+		//	if (isDevServer) {
+		//		_.each(config.entry, function (entry, key) {
+		//			if (_.isArray(entry)) {
+		//				config.entry[key].unshift('webpack/hot/only-dev-server');
+		//				config.entry[key].unshift('webpack-dev-server/client?http://' + ip + ':' + port);
+		//			}
+		//		});
+		//	}
+		//
+		//	[
+		//		'actions',
+		//		'reducers',
+		//		'components',
+		//		'containers',
+		//		'store',
+		//		'styles',
+		//		'utils',
+		//	].map(function (group) {
+		//		config.resolve.alias[group] = path.join(appRootPath, 'src', group)
+		//	});
+		//
+		//
+		//	return config;
+		//};
+		//config = configEdit(config);
 
 		var compiler = webpack(config);
 		if (isDevServer) {
@@ -118,10 +107,11 @@ forAllApps(function (appName, appRootPath) {
 				historyApiFallback: true,
 				hot: true,
 				inline: true,
-				stats: {
-					progress: true,
-					colors: true
-				},
+				stats: false,
+				//stats: {
+				//	progress: true,
+				//	colors: true
+				//},
 				port: port,
 				publicPath: '/',
 				noInfo: false

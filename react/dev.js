@@ -5,8 +5,11 @@ var WebpackConfig = require('webpack-config');
 var here = require('../utils/here');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-var config = {};
-config[path.join(__dirname, './base')] = function (config) {
+var baseConfigs = require(path.join(__dirname, './base'));
+
+module.exports = baseConfigs.map(function(baseConfig) {
+
+	var config = new WebpackConfig().merge(baseConfig);
 
 	_.each(config.module.loaders, function (loader, key) {
 
@@ -26,14 +29,12 @@ config[path.join(__dirname, './base')] = function (config) {
 
 	});
 
-	return config;
-};
+	config.merge({
+		plugins: [
+			new ExtractTextPlugin('[name].css')
+		]
+	});
 
-module.exports = new WebpackConfig().extend(config).merge({
-	plugins: [
-		new ExtractTextPlugin('[name].css'),
-	]
+	return config.toObject();
+
 });
-
-//console.log(module.exports.module.loaders);
-//process.exit();
