@@ -102,20 +102,29 @@ forAllApps(function (appName, appRootPath) {
 
 		var compiler = webpack(config);
 		if (isDevServer) {
-			new WebpackDevServer(compiler, {
-				contentBase: path.join(appRootPath, 'public'),
-				historyApiFallback: true,
-				hot: true,
-				inline: true,
-				stats: false,
-				//stats: {
-				//	progress: true,
-				//	colors: true
-				//},
-				port: port,
-				publicPath: '/',
-				noInfo: false
-			}).listen(port, ip, function (err) {
+			var devServerConfig = config.reduce(function (acc, curr) {
+				return _.assign(acc, curr.devServer || {});
+			}, {});
+
+			devServerConfig = _.defaultsDeep(
+				devServerConfig,
+				{
+					contentBase: path.join(appRootPath, 'public'),
+					historyApiFallback: true,
+					hot: true,
+					inline: true,
+					stats: false,
+					//stats: {
+					//	progress: true,
+					//	colors: true
+					//},
+					port: port,
+					publicPath: '/',
+					noInfo: false
+				}
+			);
+
+			new WebpackDevServer(compiler, devServerConfig).listen(port, ip, function (err) {
 				if (err) {
 					return console.log(err);
 				}
