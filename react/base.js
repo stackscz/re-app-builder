@@ -1,5 +1,6 @@
 var _ = require('lodash');
 var path = require('path');
+var fs = require('fs');
 var join = path.join;
 var webpack = require('webpack');
 var WebpackConfig = require('webpack-config');
@@ -8,6 +9,14 @@ var here = require('../utils/here');
 var srcPath = here('src');
 
 var baseConfigs = require(join(__dirname, '../common/base'));
+
+var builderrcFilePath = here('.builderrc');
+try {
+	fs.statSync(builderrcFilePath);
+} catch (e) {
+	builderrcFilePath = null;
+}
+
 
 module.exports = baseConfigs.map(function (baseConfig) {
 
@@ -75,7 +84,9 @@ module.exports = baseConfigs.map(function (baseConfig) {
 						plugins: [
 							'transform-decorators-legacy',
 							'transform-runtime'
-						]
+						],
+						babelrc: !!builderrcFilePath,
+						'extends': builderrcFilePath
 					}
 				}
 			]
