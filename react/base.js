@@ -79,7 +79,7 @@ module.exports = baseConfigs.map(function (baseConfig) {
 						presets: [
 							'es2015',
 							'react',
-							'stage-0'
+							'stage-1'
 						],
 						plugins: [
 							'transform-decorators-legacy',
