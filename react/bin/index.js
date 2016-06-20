@@ -1,3 +1,7 @@
+if (typeof process.env.NODE_ENV === 'undefined') {
+	process.env.NODE_ENV = 'development';
+}
+
 var _ = require("lodash");
 var fs = require("fs");
 var webpack = require("webpack");

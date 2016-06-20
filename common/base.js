@@ -34,7 +34,12 @@ module.exports = configs.map(function (config) {
 			fallback: path.join(__dirname, "..", "node_modules")
 		},
 		plugins: [
-			webpack_isomorphic_tools_plugin
+			webpack_isomorphic_tools_plugin,
+			new webpack.DefinePlugin({
+				'process.env': {
+					'NODE_ENV': '"' + process.env.NODE_ENV + '"'
+				}
+			})
 		],
 		module: {
 			preLoaders: [
