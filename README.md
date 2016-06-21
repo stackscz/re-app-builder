@@ -42,3 +42,9 @@ so you can run following commands
     npm run ab build:dev [app_name] # builds app in dev mode
     npm run ab build:dev:watch [app_name] # builds app in dev mode and watches for changes
     npm run ab build:prod [app_name] # builds app in production mode
+
+To enable linting create `.eslintrc`:
+
+    {
+      "extends": "./re-app-builder/react/.eslintrc"
+    }

@@ -91,9 +91,9 @@ module.exports = baseConfigs.map(function (baseConfig) {
 				}
 			]
 		},
-		eslint: {
-			configFile: path.join(__dirname, '.eslintrc.js')
-		}
+		//eslint: {
+		//	configFile: path.join(__dirname, '.eslintrc')
+		//}
 	});
 	return config.toObject();
 });
