@@ -79,11 +79,11 @@ module.exports = baseConfigs.map(function (baseConfig) {
 						presets: [
 							'es2015',
 							'react',
-							'stage-1'
+							'stage-1',
 						],
 						plugins: [
 							'transform-decorators-legacy',
-							'transform-runtime'
+							'transform-runtime',
 						],
 						babelrc: !!builderrcFilePath,
 						'extends': builderrcFilePath
@@ -91,9 +91,6 @@ module.exports = baseConfigs.map(function (baseConfig) {
 				}
 			]
 		},
-		//eslint: {
-		//	configFile: path.join(__dirname, '.eslintrc')
-		//}
 	});
 	return config.toObject();
 });
