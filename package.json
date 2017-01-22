@@ -1,6 +1,6 @@
 {
   "name": "re-app-builder",
-  "version": "1.0.0-dev.0",
+  "version": "1.0.0-dev.1",
   "description": "Webpack build tool for react",
   "main": "index.js",
   "scripts": {},
@@ -8,8 +8,8 @@
   "license": "MIT",
   "repository": "https://github.com/stackscz/re-app-builder",
   "engines": {
-	"node": "^4.0.0",
-	"npm": "^3.0.0"
+	"node": ">=4.0.0",
+	"npm": ">=3.0.0"
   },
   "engineStrict": true,
   "dependencies": {

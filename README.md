@@ -4,10 +4,32 @@ Enables your `react` ES6 web project to be built with `webpack` out of the box w
 
 ## Installation
 
-`cd` into your clean project directory and run
+1. `cd` into your clean project directory and run
+
 
     npm init
-    npm i -S re-app-builder
+    yarn add --dev re-app-builder
+
+
+2. Add `re-app-builder` script section entry to your `package.json`
+
+
+    // example package.json
+    {
+        "scripts": {
+            "ab": "node ./node_modules/re-app-builder"
+        }
+    }
+
+3. Extend your .babelrc
+
+
+    {
+        "extends": "./node_modules/re-app-builder/configs/.babelrc",
+    }
+
+
+4. `npm run dev`, [http://127.0.0.1:8080]()
 
 ## Usage
 
