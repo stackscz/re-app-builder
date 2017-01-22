@@ -26,7 +26,6 @@ const vendorPromise = new Promise(function (resolve, reject) {
 				projectPackage,
 				{ projectDirName: projectDirName, excludedModules: userConfig.excludedModules }
 			);
-			console.log(vendorConfig);
 			const vendorCompiler = webpack(
 				vendorConfig
 			);
