@@ -18,21 +18,28 @@ if (process.env.DEVSERVER) {
 }
 
 module.exports = function (projectPackage, options) {
+	const templatePath = '!!ejs-loader!' + path.resolve(__dirname, 'index-dev.ejs');
+	const entry = {
+		devDocument: [
+			templatePath,
+		],
+	};
+
 	var vendorLibs = _.keys(projectPackage.dependencies);
+	vendorLibs.unshift(path.resolve(__dirname, 'vendorPlaceholder.js'));
+
 	vendorLibs = _.reduce(_.get(options, 'excludedModules', []), function (res, excluded) {
 		return _.without(
 			res,
 			excluded
 		);
 	}, vendorLibs);
-	const templatePath = '!!ejs-loader!' + path.resolve(__dirname, 'index-dev.ejs');
+	if (vendorLibs.length) {
+		entry.vendor = vendorLibs;
+	}
+
 	return {
-		entry: {
-			vendor: vendorLibs,
-			devDocument: [
-				templatePath,
-			],
-		},
+		entry: entry,
 		output: {
 			path: path.resolve(options.projectDirName, 'public', 'build'),
 			filename: '[name].bundle.js',

@@ -89,6 +89,7 @@ module.exports = function (config, options) {
 		}
 		return entry;
 	});
+	console.log(config.entry);
 
 	// const context = path.resolve(__dirname, '..');
 	// const context = '.';

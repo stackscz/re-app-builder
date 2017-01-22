@@ -22,11 +22,13 @@ const vendorPromise = new Promise(function (resolve, reject) {
 	switch (command) {
 		case 'dev':
 			const vendorConfigFactory = require('./configs/vendor');
+			const vendorConfig = vendorConfigFactory(
+				projectPackage,
+				{ projectDirName: projectDirName, excludedModules: userConfig.excludedModules }
+			);
+			console.log(vendorConfig);
 			const vendorCompiler = webpack(
-				vendorConfigFactory(
-					projectPackage,
-					{ projectDirName: projectDirName, excludedModules: userConfig.excludedModules }
-				)
+				vendorConfig
 			);
 			vendorCompiler.run((err, stats) => {
 				if (err || stats.hasErrors()) {

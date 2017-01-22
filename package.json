@@ -1,8 +1,8 @@
 {
   "name": "re-app-builder",
-  "version": "1.0.0-dev.2",
+  "version": "1.0.0-dev.3",
   "description": "Webpack build tool for react",
-  "main": "index.js",
+  "main": "bin.js",
   "scripts": {},
   "author": "@stackscz",
   "license": "MIT",
