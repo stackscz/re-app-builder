@@ -1,0 +1,69 @@
+{
+  "presets": [
+	"react",
+	"es2015",
+	"stage-0"
+  ],
+  "plugins": [
+	[
+	  "lodash",
+	  {
+		"id": [
+		  "lodash",
+		  "recompose"
+		]
+	  }
+	],
+	[
+	  "module-resolver",
+	  {
+		"root": [
+		  "./"
+		],
+		"alias": {
+		  "components": "./src/components",
+		  "screens": "./src/screens"
+		}
+	  }
+	],
+	"babel-plugin-external-helpers",
+	[
+	  "react-intl",
+	  {
+		"messagesDir": "./src/i18n/",
+		"enforceDescriptions": true
+	  }
+	],
+	"syntax-flow",
+	"transform-decorators-legacy",
+	"transform-runtime",
+	"tcomb",
+	"transform-flow-strip-types"
+  ],
+  "env": {
+	"dev": {
+	  "plugins": [
+		"react-hot-loader/babel"
+	  ]
+	},
+	"production": {
+	  "plugins": [
+		"transform-remove-console"
+	  ]
+	},
+	"test": {
+	  "plugins": [
+		[
+		  "module-resolver",
+		  {
+			"root": [
+			  "./"
+			],
+			"alias": {
+			}
+		  }
+		]
+	  ]
+	}
+  }
+}
