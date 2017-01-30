@@ -18,11 +18,21 @@ if (process.env.DEVSERVER) {
 }
 
 module.exports = function (projectPackage, options) {
-	const templatePath = '!!ejs-loader!' + path.resolve(__dirname, 'index-dev.ejs');
+	const templatePath = path.resolve(__dirname, 'index-dev.ejs');
 	const entry = {
 		devDocument: [
 			templatePath,
 		],
+		module: {
+			rules: [
+				{
+					test: /\.(ejs)$/,
+					loaders: [
+						'ejs-loader'
+					],
+				},
+			]
+		},
 	};
 
 	var vendorLibs = _.keys(projectPackage.dependencies);

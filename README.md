@@ -26,7 +26,7 @@ Enables your `react` ES6 web project to be built with `webpack` out of the box w
 
     // .babelrc
     {
-        "extends": "./node_modules/re-app-builder/configs/.babelrc",
+        "extends": "re-app-builder/configs/.babelrc"
     }
 
 
