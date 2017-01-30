@@ -54,12 +54,12 @@ module.exports = function (projectPackage, options) {
 			modules: [
 				'node_modules',
 				'./node_modules/re-app-builder/node_modules',
-				// path.resolve(options.projectDirName, 'node_modules'),
 			],
 		},
 		resolveLoader: {
 			modules: [
-				path.resolve(__dirname, '../node_modules')
+				'../node_modules',
+				'./node_modules/re-app-builder/node_modules',
 			]
 		},
 		module: {

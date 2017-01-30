@@ -180,6 +180,8 @@ module.exports = function (config, options) {
 		},
 		resolveLoader: {
 			modules: [
+				'node_modules',
+				'./node_modules/re-app-builder/node_modules',
 				path.resolve(__dirname, '../node_modules')
 			]
 		},
