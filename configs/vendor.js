@@ -23,16 +23,6 @@ module.exports = function (projectPackage, options) {
 		devDocument: [
 			templatePath,
 		],
-		module: {
-			rules: [
-				{
-					test: /\.(ejs)$/,
-					loaders: [
-						'ejs-loader'
-					],
-				},
-			]
-		},
 	};
 
 	var vendorLibs = _.keys(projectPackage.dependencies);
@@ -74,6 +64,12 @@ module.exports = function (projectPackage, options) {
 		},
 		module: {
 			rules: [
+				{
+					test: /\.(ejs)$/,
+					loaders: [
+						'ejs-loader'
+					],
+				},
 				{
 					test: /\.json$/,
 					loader: 'json-loader',
