@@ -58,7 +58,7 @@ module.exports = function (projectPackage, options) {
 		},
 		resolveLoader: {
 			modules: [
-				'../node_modules',
+				'node_modules',
 				'./node_modules/re-app-builder/node_modules',
 			]
 		},
