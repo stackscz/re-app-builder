@@ -30,9 +30,10 @@
 <body>
 <div id="root"></div>
 
-<script src="/config.js"></script>
-<script src="/build/vendor.bundle.js"></script>
-<script src="/build/index.js"></script>
+<script src="/build/vendor.bundle.js?<%= webpack.hash %>"></script>
+<% Object.keys(htmlWebpackPlugin.files.chunks).sort().forEach(function(chunkId) { %>
+<script src="<%= htmlWebpackPlugin.files.chunks[chunkId].entry %>"></script>
+<% }); %>
 
 </body>
 </html>

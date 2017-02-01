@@ -54,6 +54,8 @@ module.exports = function (config, options) {
 		return;
 	}
 
+	const PORT = _.get(config, 'devServer.port', 8080);
+	const PUBLIC_PATH = '/build/';
 
 	config = _.defaultsDeep(
 		config,
@@ -62,8 +64,50 @@ module.exports = function (config, options) {
 				filename: '[name].js',
 				path: path.resolve(options.projectDirName, 'public', 'build'),
 				pathinfo: true,
-				publicPath: '/build/',
-			}
+				publicPath: PUBLIC_PATH,
+			},
+			devServer: {
+				historyApiFallback: {
+					index: 'index-dev.html',
+					rewrites: [
+						{ from: /^\/(?!(build|favicon|swagger|config\.js|examples)).*/g, to: '/build/index-dev.html' },
+					],
+				},
+				staticOptions: {
+					fallthrough: true,
+					index: 'index-dev.html',
+				},
+				contentBase: path.resolve(options.projectDirName, 'public'),
+				publicPath: PUBLIC_PATH,
+				host: '0.0.0.0',
+				port: PORT,
+				hot: true,
+				inline: false,
+				stats: {
+					hash: false,
+					colors: true,
+					chunks: false,
+					chunkModules: false,
+					version: false,
+					reasons: true
+				},
+				proxy: {
+					'/api/**': {
+						changeOrigin: true,
+						target: nconf.get('API_URL'),
+						onError: () => ({}),
+					},
+					'/websockets/**': {
+						changeOrigin: true,
+						ws: true,
+						target: nconf.get('API_URL'),
+					},
+					'/signin/**': {
+						changeOrigin: true,
+						target: nconf.get('API_URL'),
+					},
+				},
+			},
 		}
 	);
 
@@ -83,7 +127,7 @@ module.exports = function (config, options) {
 		if (devserver) {
 			entry.unshift(
 				'webpack/hot/dev-server',
-				'webpack-dev-server/client?http://localhost:8080',
+				'webpack-dev-server/client?http://localhost:' + PORT,
 				'react-hot-loader/patch'
 			);
 		}
@@ -134,12 +178,20 @@ module.exports = function (config, options) {
 
 	if (devserver) {
 		plugins.pop();
+		const templatePath = path.resolve(__dirname, 'index-dev.ejs');
 		plugins.push(
 			new webpack.HotModuleReplacementPlugin(),
 			new webpack.NamedModulesPlugin(),
 			new webpack.DllReferencePlugin({
 				context: options.projectDirName,
 				manifest: require(path.resolve(options.projectDirName, 'manifest', 'vendor-manifest.json')),
+			}),
+			new HtmlWebpackPlugin({
+				title: projectName,
+				filename: path.resolve(options.projectDirName, 'public', 'build', 'index-dev.html'),
+				template: '!!ejs-loader!' + templatePath,
+				inject: false,
+				hash: true,
 			})
 		)
 	} else {
@@ -173,16 +225,15 @@ module.exports = function (config, options) {
 		context: context,
 		resolve: {
 			modules: [
+				'web_modules',
 				'node_modules',
 				'./node_modules/re-app-builder/node_modules',
-				// path.resolve(options.projectDirName, 'node_modules'),
 			],
 		},
 		resolveLoader: {
 			modules: [
 				'node_modules',
 				'./node_modules/re-app-builder/node_modules',
-				path.resolve(__dirname, '../node_modules')
 			]
 		},
 		plugins: plugins,
@@ -334,48 +385,6 @@ module.exports = function (config, options) {
 				}
 			]
 		},
-		devServer: {
-			historyApiFallback: {
-				index: 'index-dev.html',
-				rewrites: [
-					{ from: /^\/(?!(build|favicon|swagger|config\.js|examples)).*/g, to: 'index-dev.html' },
-					{ from: /^\/examples/g, to: 'examples.html' },
-				],
-			},
-			staticOptions: {
-				fallthrough: true,
-				index: 'index-dev.html',
-			},
-			contentBase: path.resolve(options.projectDirName, 'public'),
-			publicPath: config.output.publicPath,
-			host: '0.0.0.0',
-			port: 8080,
-			hot: true,
-			inline: false,
-			stats: {
-				hash: false,
-				colors: true,
-				chunks: false,
-				chunkModules: false,
-				version: false,
-				reasons: true
-			},
-			proxy: {
-				'/api/**': {
-					changeOrigin: true,
-					target: nconf.get('API_URL'),
-					onError: () => ({}),
-				},
-				'/websockets/**': {
-					changeOrigin: true,
-					ws: true,
-					target: nconf.get('API_URL'),
-				},
-				'/signin/**': {
-					changeOrigin: true,
-					target: nconf.get('API_URL'),
-				},
-			},
-		}
+		devServer: config.devServer
 	};
 };

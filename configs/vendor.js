@@ -18,11 +18,11 @@ if (process.env.DEVSERVER) {
 }
 
 module.exports = function (projectPackage, options) {
-	const templatePath = path.resolve(__dirname, 'index-dev.ejs');
+	// const templatePath = path.resolve(__dirname, 'index-dev.ejs');
 	const entry = {
-		devDocument: [
-			templatePath,
-		],
+		// devDocument: [
+		// 	templatePath,
+		// ],
 	};
 
 	var vendorLibs = _.keys(projectPackage.dependencies);
@@ -45,13 +45,9 @@ module.exports = function (projectPackage, options) {
 			filename: '[name].bundle.js',
 			library: '[name]_lib',
 		},
-		// resolve: {
-		// 	modules: [
-		// 		path.resolve(options.projectDirName, 'node_modules'),
-		// 	],
-		// },
 		resolve: {
 			modules: [
+				'web_modules',
 				'node_modules',
 				'./node_modules/re-app-builder/node_modules',
 			],
@@ -91,14 +87,14 @@ module.exports = function (projectPackage, options) {
 				path: path.resolve(options.projectDirName, 'manifest', '[name]-manifest.json'),
 				name: '[name]_lib',
 			}),
-			new HtmlWebpackPlugin({
-				chunks: ['devDocument'],
-				title: 'Dev',
-				filename: path.resolve(options.projectDirName, 'public/index-dev.html'),
-				template: templatePath,
-				inject: false,
-				hash: true,
-			}),
+			// new HtmlWebpackPlugin({
+			// 	chunks: ['devDocument'],
+			// 	title: 'Dev',
+			// 	filename: path.resolve(options.projectDirName, 'public/index-dev.html'),
+			// 	template: templatePath,
+			// 	inject: false,
+			// 	hash: true,
+			// }),
 		],
 	};
 };
