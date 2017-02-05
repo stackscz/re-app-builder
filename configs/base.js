@@ -369,6 +369,13 @@ module.exports = function (config, options) {
 		}
 	].concat(_.get(config, 'module.rules', []));
 
+	var babelRuntimePath = path.resolve(__dirname, '..', 'node_modules', 'babel-runtime');
+	try {
+		fs.statSync(babelRuntimePath)
+	} catch (error) {
+		babelRuntimePath = path.resolve(options.projectDirName, 'node_modules', 'babel-runtime');
+	}
+
 	return {
 		devtool: false, //devserver ? 'cheap-module-eval-source-map' : false,
 		entry: config.entry,
@@ -380,7 +387,7 @@ module.exports = function (config, options) {
 				_.get(config, 'resolve.alias', {}),
 				{
 					// 'babel-runtime': fs.realpathSync(path.resolve(__dirname, 'node_modules', 'babel-runtime'))
-					'babel-runtime': path.resolve(__dirname, '..', 'node_modules', 'babel-runtime')
+					'babel-runtime': babelRuntimePath,
 				}
 			),
 			modules: [
