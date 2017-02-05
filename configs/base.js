@@ -218,6 +218,154 @@ module.exports = function (config, options) {
 		);
 	}
 
+
+	var rules  =[
+		{
+			test: /\.(js|jsx)$/,
+			loaders: [
+				'babel-loader?babelrc=false&extends=' + path.resolve(options.projectDirName, '.babelrc')
+			],
+			// exclude: /(node_modules|bower_components)/,
+			include: [
+				path.resolve(options.projectDirName, 'node_modules', 'generic-pool'),
+				path.resolve(options.projectDirName, 'src'),
+				path.resolve(options.projectDirName, 'specs'),
+				path.resolve(options.projectDirName, 'examples'),
+				path.resolve(options.projectDirName, 'initialState.js'),
+				// path.join(options.projectDirName, 'node_modules', 'generic-pool'),
+			]
+		},
+		{
+			test: /(components|containers)*(js|jsx)$/,
+			loaders: [
+				'baggage-loader?index.sass',
+			],
+			include: [path.join(options.projectDirName, 'src')]
+		},
+		{
+			test: /\.json$/,
+			loader: 'json-loader'
+		},
+		{
+			test: /\.css$/,
+			loaders: devserver ? (
+				                   [
+					                   'style-loader',
+					                   'css-loader',
+					                   'postcss-loader',
+				                   ]
+			                   ) : (
+				         ExtractTextPlugin.extract({
+					         fallbackLoader: 'style-loader',
+					         loader: [
+						         {
+							         loader: 'css-loader',
+							         query: {
+								         minimize: true,
+							         },
+						         },
+						         {
+							         loader: 'postcss-loader',
+						         },
+					         ]
+				         })
+			         ),
+		},
+		{
+			test: /\.less/,
+			loader: devserver ? (
+				                  [
+					                  'style-loader',
+					                  'css-loader',
+					                  'postcss-loader',
+					                  'less-loader',
+				                  ]
+			                  ) : (
+				        ExtractTextPlugin.extract({
+					        fallbackLoader: 'style-loader',
+					        loader: [
+						        {
+							        loader: 'css-loader',
+							        query: {
+								        minimize: true,
+							        },
+						        },
+						        {
+							        loader: 'postcss-loader',
+						        },
+						        {
+							        loader: 'less-loader',
+						        },
+					        ],
+				        })
+			        )
+		},
+		{
+			test: /\.sass/,
+			loader: devserver ?
+			        (
+				        ['style-loader', 'css-loader', 'postcss-loader', 'resolve-url-loader', {
+					        loader: 'sass-loader',
+					        query: { sourceMap: true }
+				        }]
+			        ) :
+			        (
+				        ExtractTextPlugin.extract({
+					        fallbackLoader: 'style-loader',
+					        loader: [
+						        {
+							        loader: 'css-loader',
+							        query: {
+								        minimize: true,
+							        },
+						        },
+						        {
+							        loader: 'postcss-loader',
+						        },
+						        {
+							        loader: 'resolve-url-loader',
+						        },
+						        {
+							        loader: 'sass-loader',
+							        query: {
+								        sourceMap: true,
+							        },
+						        },
+					        ],
+				        })
+			        )
+		},
+
+
+		// Fonts loaders
+		{
+			test: /\.(woff(2)?)(\?[a-z0-9\.=\-]+)?$/,
+			loader: "url-loader?limit=16384&name=fonts/[hash].[ext]&mimetype=application/font-woff"
+		},
+		{
+			test: /\.(ttf)(\?[A-Za-z0-9&#\.=\-]+)?$/,
+			loader: "url-loader?limit=16384&name=fonts/[hash].[ext]"
+		},
+		{
+			test: /\.(eot)(\?[a-z0-9\.=\-]+)?$/,
+			loader: "url-loader?limit=16384&name=fonts/[hash].[ext]"
+		},
+		{
+			test: /\.(svg)(\?[a-z0-9\.=\-]+)$/,
+			loader: "file-loader?limit=16384&name=fonts/[hash].[ext]"
+		},
+
+
+		// Images loaders
+		{
+			test: /\.(jpe?g|png|gif|svg)$/i,
+			loaders: [
+				'url-loader?limit=8192&name=[hash].[ext]',
+				'image-webpack-loader?bypassOnDebug&optimizationLevel=7&interlaced=false'
+			]
+		}
+	].concat(_.get(config, 'module.rules', []));
+
 	return {
 		devtool: false, //devserver ? 'cheap-module-eval-source-map' : false,
 		entry: config.entry,
@@ -238,152 +386,7 @@ module.exports = function (config, options) {
 		},
 		plugins: plugins,
 		module: {
-			rules: [
-				{
-					test: /\.(js|jsx)$/,
-					loaders: [
-						'babel-loader?babelrc=false&extends=' + path.resolve(options.projectDirName, '.babelrc')
-					],
-					// exclude: /(node_modules|bower_components)/,
-					include: [
-						path.resolve(options.projectDirName, 'node_modules', 'generic-pool'),
-						path.resolve(options.projectDirName, 'src'),
-						path.resolve(options.projectDirName, 'specs'),
-						path.resolve(options.projectDirName, 'examples'),
-						path.resolve(options.projectDirName, 'initialState.js'),
-						// path.join(options.projectDirName, 'node_modules', 'generic-pool'),
-					]
-				},
-				{
-					test: /(components|containers)*(js|jsx)$/,
-					loaders: [
-						'baggage-loader?index.sass',
-					],
-					include: [path.join(options.projectDirName, 'src')]
-				},
-				{
-					test: /\.json$/,
-					loader: 'json-loader'
-				},
-				{
-					test: /\.css$/,
-					loaders: devserver ? (
-						                   [
-							                   'style-loader',
-							                   'css-loader',
-							                   'postcss-loader',
-						                   ]
-					                   ) : (
-						         ExtractTextPlugin.extract({
-							         fallbackLoader: 'style-loader',
-							         loader: [
-								         {
-									         loader: 'css-loader',
-									         query: {
-										         minimize: true,
-									         },
-								         },
-								         {
-									         loader: 'postcss-loader',
-								         },
-							         ]
-						         })
-					         ),
-				},
-				{
-					test: /\.less/,
-					loader: devserver ? (
-						                  [
-							                  'style-loader',
-							                  'css-loader',
-							                  'postcss-loader',
-							                  'less-loader',
-						                  ]
-					                  ) : (
-						        ExtractTextPlugin.extract({
-							        fallbackLoader: 'style-loader',
-							        loader: [
-								        {
-									        loader: 'css-loader',
-									        query: {
-										        minimize: true,
-									        },
-								        },
-								        {
-									        loader: 'postcss-loader',
-								        },
-								        {
-									        loader: 'less-loader',
-								        },
-							        ],
-						        })
-					        )
-				},
-				{
-					test: /\.sass/,
-					loader: devserver ?
-					        (
-						        ['style-loader', 'css-loader', 'postcss-loader', 'resolve-url-loader', {
-							        loader: 'sass-loader',
-							        query: { sourceMap: true }
-						        }]
-					        ) :
-					        (
-						        ExtractTextPlugin.extract({
-							        fallbackLoader: 'style-loader',
-							        loader: [
-								        {
-									        loader: 'css-loader',
-									        query: {
-										        minimize: true,
-									        },
-								        },
-								        {
-									        loader: 'postcss-loader',
-								        },
-								        {
-									        loader: 'resolve-url-loader',
-								        },
-								        {
-									        loader: 'sass-loader',
-									        query: {
-										        sourceMap: true,
-									        },
-								        },
-							        ],
-						        })
-					        )
-				},
-
-
-				// Fonts loaders
-				{
-					test: /\.(woff(2)?)(\?[a-z0-9\.=\-]+)?$/,
-					loader: "url-loader?limit=16384&name=fonts/[hash].[ext]&mimetype=application/font-woff"
-				},
-				{
-					test: /\.(ttf)(\?[A-Za-z0-9&#\.=\-]+)?$/,
-					loader: "url-loader?limit=16384&name=fonts/[hash].[ext]"
-				},
-				{
-					test: /\.(eot)(\?[a-z0-9\.=\-]+)?$/,
-					loader: "url-loader?limit=16384&name=fonts/[hash].[ext]"
-				},
-				{
-					test: /\.(svg)(\?[a-z0-9\.=\-]+)$/,
-					loader: "file-loader?limit=16384&name=fonts/[hash].[ext]"
-				},
-
-
-				// Images loaders
-				{
-					test: /\.(jpe?g|png|gif|svg)$/i,
-					loaders: [
-						'url-loader?limit=8192&name=[hash].[ext]',
-						'image-webpack-loader?bypassOnDebug&optimizationLevel=7&interlaced=false'
-					]
-				}
-			]
+			rules: rules,
 		},
 		devServer: config.devServer
 	};
