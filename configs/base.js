@@ -3,6 +3,7 @@
 var webpack = require('webpack');
 var _ = require('lodash');
 var path = require('path');
+var fs = require('fs');
 var nconf = require('nconf');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var precss = require('precss');
@@ -131,6 +132,9 @@ module.exports = function (config, options) {
 				'react-hot-loader/patch'
 			);
 		}
+		entry.unshift(
+			'babel-polyfill'
+		);
 		return entry;
 	});
 
@@ -218,8 +222,7 @@ module.exports = function (config, options) {
 		);
 	}
 
-
-	var rules  =[
+	var rules = [
 		{
 			test: /\.(js|jsx)$/,
 			loaders: [
@@ -372,6 +375,14 @@ module.exports = function (config, options) {
 		output: config.output,
 		context: context,
 		resolve: {
+			// alias: _.get(config, 'resolve.alias', {}),
+			alias: _.merge(
+				_.get(config, 'resolve.alias', {}),
+				{
+					// 'babel-runtime': fs.realpathSync(path.resolve(__dirname, 'node_modules', 'babel-runtime'))
+					'babel-runtime': path.resolve(__dirname, '..', 'node_modules', 'babel-runtime')
+				}
+			),
 			modules: [
 				'web_modules',
 				'node_modules',
