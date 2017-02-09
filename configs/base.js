@@ -114,6 +114,7 @@ module.exports = function (config, options) {
 
 	const devserver = options.devserver;
 
+	let babelPolyfillAlreadyIncluded = false;
 	config.entry = _.mapValues(config.entry, function (entry, key) {
 		if (_.isString(entry)) {
 			entry = [entry];
@@ -132,9 +133,12 @@ module.exports = function (config, options) {
 				'react-hot-loader/patch'
 			);
 		}
-		entry.unshift(
-			'babel-polyfill'
-		);
+		if (!babelPolyfillAlreadyIncluded) {
+			babelPolyfillAlreadyIncluded = true;
+			entry.unshift(
+				'babel-polyfill'
+			);
+		}
 		return entry;
 	});
 
