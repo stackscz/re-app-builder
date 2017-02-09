@@ -11,8 +11,6 @@ var autoprefixer = require('autoprefixer');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
-nconf.env().file('.env');
-
 const processEnvConsts = (nconf.get('SUPPORTED_APPS') || [])
 	.reduce(
 		(acc, appModuleName) => {
@@ -54,6 +52,9 @@ module.exports = function (config, options) {
 		console.error(error);
 		return;
 	}
+
+
+	nconf.env().file(path.resolve(options.projectDirName, '.env'));
 
 	const PORT = _.get(config, 'devServer.port', 8080);
 	const PUBLIC_PATH = '/build/';

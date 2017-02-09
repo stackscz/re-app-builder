@@ -1,9 +1,11 @@
 {
 	"name": "re-app-builder",
-	"version": "1.0.0-dev.13",
+	"version": "1.0.0-dev.14",
 	"description": "Webpack build tool for react",
 	"main": "bin.js",
-	"scripts": {},
+	"scripts": {
+	  "release": "git add . && git commit && git push upstream 1.0.0-dev && npm publish"
+	},
 	"author": "@stackscz",
 	"license": "MIT",
 	"repository": "https://github.com/stackscz/re-app-builder",
