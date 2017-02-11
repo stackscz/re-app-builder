@@ -396,6 +396,7 @@ module.exports = function (config, options) {
 				}
 			),
 			modules: [
+				path.resolve(options.projectDirName, "node_modules"),
 				'web_modules',
 				'node_modules',
 				'./node_modules/re-app-builder/node_modules',
