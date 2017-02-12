@@ -93,22 +93,13 @@ module.exports = function (config, options) {
 					version: false,
 					reasons: true
 				},
-				proxy: {
+				proxy: _.assign({
 					'/api/**': {
 						changeOrigin: true,
 						target: nconf.get('API_URL'),
 						onError: () => ({}),
 					},
-					'/websockets/**': {
-						changeOrigin: true,
-						ws: true,
-						target: nconf.get('API_URL'),
-					},
-					'/signin/**': {
-						changeOrigin: true,
-						target: nconf.get('API_URL'),
-					},
-				},
+				}, _.get(config, 'devServer.proxy', {})),
 			},
 		}
 	);
