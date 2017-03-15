@@ -1,6 +1,6 @@
 {
 	"name": "re-app-builder",
-	"version": "1.0.0-dev.19",
+	"version": "1.0.0-dev.20",
 	"description": "Webpack build tool for react",
 	"main": "bin.js",
 	"scripts": {
@@ -59,6 +59,7 @@
 		"tap-spec": "^4.1.1",
 		"tape": "^4.6.2",
 		"tape-watch": "^2.2.3",
+		"tcomb": "^3.2.2",
 		"url-loader": "^0.5.7",
 		"webpack": "^2.2.0-rc.1",
 		"webpack-bundle-analyzer": "^2.2.1",
