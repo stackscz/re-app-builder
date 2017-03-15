@@ -988,10 +988,6 @@ babylon@^6.0.18, babylon@^6.11.0, babylon@^6.15.0:
   version "6.15.0"
   resolved "https://registry.yarnpkg.com/babylon/-/babylon-6.15.0.tgz#ba65cfa1a80e1759b0e89fb562e27dccae70348e"
 
-baggage-loader@^0.2.4:
-  version "0.2.4"
-  resolved "https://registry.yarnpkg.com/baggage-loader/-/baggage-loader-0.2.4.tgz#f99bc8c15b16f0d0468ba9d248ee98fad9032e06"
-
 balanced-match@0.1.0, balanced-match@~0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-0.1.0.tgz#b504bd05869b39259dd0c5efc35d843176dccc4a"

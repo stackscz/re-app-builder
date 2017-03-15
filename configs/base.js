@@ -237,13 +237,6 @@ module.exports = function (config, options) {
 			]
 		},
 		{
-			test: /(components|containers)*(js|jsx)$/,
-			loaders: [
-				'baggage-loader?index.sass',
-			],
-			include: [path.join(options.projectDirName, 'src')]
-		},
-		{
 			test: /\.json$/,
 			loader: 'json-loader'
 		},
