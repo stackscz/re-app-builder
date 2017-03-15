@@ -24,7 +24,8 @@ const vendorPromise = new Promise(function (resolve, reject) {
 			const vendorConfigFactory = require('./configs/vendor');
 			const vendorConfig = vendorConfigFactory(
 				projectPackage,
-				{ projectDirName: projectDirName, excludedModules: userConfig.excludedModules }
+				{ projectDirName: projectDirName, excludedModules: userConfig.excludedModules },
+				userConfig
 			);
 			const vendorCompiler = webpack(
 				vendorConfig

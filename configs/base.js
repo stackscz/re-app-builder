@@ -152,6 +152,8 @@ module.exports = function (config, options) {
 			'process.env': processEnvConsts,
 		}),
 		new webpack.LoaderOptionsPlugin({
+			minimize: process.env.NODE_ENV === 'production',
+			// debug: process.env.NODE_ENV === 'development',
 			options: {
 				sassLoader: {
 					includePaths: [

@@ -17,7 +17,7 @@ if (process.env.DEVSERVER) {
 	}
 }
 
-module.exports = function (projectPackage, options) {
+module.exports = function (projectPackage, options, config) {
 	// const templatePath = path.resolve(__dirname, 'index-dev.ejs');
 	const entry = {
 		// devDocument: [
@@ -45,13 +45,16 @@ module.exports = function (projectPackage, options) {
 			filename: '[name].bundle.js',
 			library: '[name]_lib',
 		},
-		resolve: {
-			modules: [
-				'web_modules',
-				'node_modules',
-				'./node_modules/re-app-builder/node_modules',
-			],
-		},
+		resolve: _.merge(
+			{
+				modules: [
+					'web_modules',
+					'node_modules',
+					'./node_modules/re-app-builder/node_modules',
+				],
+			},
+			_.get(config, 'resolve', {})
+		),
 		resolveLoader: {
 			modules: [
 				'node_modules',
