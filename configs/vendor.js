@@ -3,19 +3,19 @@ var webpack = require('webpack');
 var _ = require('lodash');
 var path = require('path');
 var fs = require('fs');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+// var HtmlWebpackPlugin = require('html-webpack-plugin');
 
-if (process.env.DEVSERVER) {
-	try {
-		fs.accessSync('.env');
-	} catch (e) {
-		console.warn('No .env file found! Please read README.md section Development.');
-		if (!process.env.API_URL) {
-			console.error('No API_URL environment set! Development server will not start. Please read README.md section Development.'); // eslint-disable-line
-			process.exit(1);
-		}
-	}
-}
+// if (process.env.DEVSERVER) {
+// 	try {
+// 		fs.accessSync('.env');
+// 	} catch (e) {
+// 		console.warn('No .env file found! Please read README.md section Development.');
+// 		if (!process.env.API_URL) {
+// 			console.error('No API_URL environment set! Development server will not start. Please read README.md section Development.'); // eslint-disable-line
+// 			process.exit(1);
+// 		}
+// 	}
+// }
 
 module.exports = function (projectPackage, options, config) {
 	// const templatePath = path.resolve(__dirname, 'index-dev.ejs');
@@ -41,7 +41,7 @@ module.exports = function (projectPackage, options, config) {
 	return {
 		entry: entry,
 		output: {
-			path: path.resolve(options.projectDirName, 'public', 'build'),
+			path: _.get(config, 'output.path', path.resolve(options.projectDirName, 'public', 'build')),
 			filename: '[name].bundle.js',
 			library: '[name]_lib',
 		},

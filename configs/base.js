@@ -54,7 +54,7 @@ module.exports = function (config, options) {
 	}
 
 
-	nconf.env().file(path.resolve(options.projectDirName, '.env'));
+	nconf.env().file(path.resolve(options.projectDirName, '.env.json'));
 
 	const PORT = _.get(config, 'devServer.port', 8080);
 	const PUBLIC_PATH = '/build/';
@@ -64,7 +64,7 @@ module.exports = function (config, options) {
 		{
 			output: {
 				filename: '[name].js',
-				path: path.resolve(options.projectDirName, 'public', 'build'),
+				path: _.get(config, 'output.path', path.resolve(options.projectDirName, 'public', 'build')),
 				pathinfo: true,
 				publicPath: PUBLIC_PATH,
 			},
@@ -178,6 +178,15 @@ module.exports = function (config, options) {
 		}),
 	];
 
+	var devHtmlPath = path.resolve(
+		_.get(
+			config,
+			'output.path',
+			path.resolve(options.projectDirName, 'public', 'build')
+		),
+		'index-dev.html'
+	);
+
 	if (devserver) {
 		plugins.pop();
 		const templatePath = path.resolve(__dirname, 'index-dev.ejs');
@@ -190,7 +199,7 @@ module.exports = function (config, options) {
 			}),
 			new HtmlWebpackPlugin({
 				title: projectName,
-				filename: path.resolve(options.projectDirName, 'public', 'build', 'index-dev.html'),
+				filename: devHtmlPath,
 				template: '!!ejs-loader!' + templatePath,
 				inject: false,
 				hash: true,
@@ -243,12 +252,12 @@ module.exports = function (config, options) {
 		{
 			test: /\.css$/,
 			loaders: devserver ? (
-				                   [
-					                   'style-loader',
-					                   'css-loader',
-					                   'postcss-loader',
-				                   ]
-			                   ) : (
+				[
+					'style-loader',
+					'css-loader',
+					'postcss-loader',
+				]
+			) : (
 				         ExtractTextPlugin.extract({
 					         fallbackLoader: 'style-loader',
 					         loader: [
@@ -268,13 +277,13 @@ module.exports = function (config, options) {
 		{
 			test: /\.less/,
 			loader: devserver ? (
-				                  [
-					                  'style-loader',
-					                  'css-loader',
-					                  'postcss-loader',
-					                  'less-loader',
-				                  ]
-			                  ) : (
+				[
+					'style-loader',
+					'css-loader',
+					'postcss-loader',
+					'less-loader',
+				]
+			) : (
 				        ExtractTextPlugin.extract({
 					        fallbackLoader: 'style-loader',
 					        loader: [
@@ -296,14 +305,12 @@ module.exports = function (config, options) {
 		},
 		{
 			test: /\.sass/,
-			loader: devserver ?
-			        (
-				        ['style-loader', 'css-loader', 'postcss-loader', 'resolve-url-loader', {
-					        loader: 'sass-loader',
-					        query: { sourceMap: true }
-				        }]
-			        ) :
-			        (
+			loader: devserver ? (
+				['style-loader', 'css-loader', 'postcss-loader', 'resolve-url-loader', {
+					loader: 'sass-loader',
+					query: { sourceMap: true }
+				}]
+			) : (
 				        ExtractTextPlugin.extract({
 					        fallbackLoader: 'style-loader',
 					        loader: [
