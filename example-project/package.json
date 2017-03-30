@@ -5,7 +5,7 @@
   "build": "NODE_ENV=development npm run ab build"
  },
  "devDependencies": {
-  "re-app-builder": "^1.0.0-dev.23"
+  "re-app-builder": "^1.0.0-dev.24"
  },
  "dependencies": {
   "react": "^15.4.2",

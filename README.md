@@ -16,7 +16,9 @@ Enables your `react` ES6 web project to be built with `webpack` out of the box w
     // example package.json
     {
         "scripts": {
-            "ab": "node ./node_modules/re-app-builder/bin"
+            "ab": "node ./node_modules/re-app-builder/bin",
+            "dev": "npm run ab dev",
+            "build": "npm run ab build"
         }
     }
 
