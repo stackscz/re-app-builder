@@ -58,29 +58,33 @@ module.exports = function (config, options) {
 
 	const PORT = _.get(config, 'devServer.port', 8080);
 	const PUBLIC_PATH = '/build/';
+	const publicPath = _.get(config, 'output.publicPath', PUBLIC_PATH);
+	const publicPathMatch = publicPath.replace(/^\//, '').replace(/\/$/, '');
+	const rewriteRegex = new RegExp('^\/(?!(' + publicPathMatch + '|favicon|swagger|config\.js|examples)).*', 'g');
+
+	const outputPath = _.get(config, 'output.path', path.resolve(options.projectDirName, 'public', 'build'));
 
 	config = _.defaultsDeep(
 		config,
 		{
 			output: {
 				filename: '[name].js',
-				path: _.get(config, 'output.path', path.resolve(options.projectDirName, 'public', 'build')),
+				path: outputPath,
 				pathinfo: true,
-				publicPath: PUBLIC_PATH,
 			},
 			devServer: {
 				historyApiFallback: {
 					index: 'index-dev.html',
 					rewrites: [
-						{ from: /^\/(?!(build|favicon|swagger|config\.js|examples)).*/g, to: '/build/index-dev.html' },
+						{ from: rewriteRegex, to: '/' + publicPathMatch + '/index-dev.html' },
 					],
 				},
 				staticOptions: {
 					fallthrough: true,
 					index: 'index-dev.html',
 				},
-				contentBase: path.resolve(options.projectDirName, 'public'),
-				publicPath: PUBLIC_PATH,
+				contentBase: path.resolve(options.projectDirName, _.get(config, 'devServer.contentBase', 'public')),
+				publicPath,
 				host: '0.0.0.0',
 				port: PORT,
 				hot: true,

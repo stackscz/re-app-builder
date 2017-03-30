@@ -38,12 +38,18 @@ module.exports = function (projectPackage, options, config) {
 		entry.vendor = vendorLibs;
 	}
 
+	const outputPath = _.get(config, 'output.path', path.resolve(options.projectDirName, 'public', 'build'));
+
+	const PUBLIC_PATH = '/build/';
+	const publicPath = _.get(config, 'output.publicPath', PUBLIC_PATH);
+
 	return {
 		entry: entry,
 		output: {
-			path: _.get(config, 'output.path', path.resolve(options.projectDirName, 'public', 'build')),
+			path: outputPath,
 			filename: '[name].bundle.js',
 			library: '[name]_lib',
+			publicPath,
 		},
 		resolve: _.merge(
 			{

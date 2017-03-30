@@ -30,7 +30,7 @@
 <body>
 <div id="root"></div>
 
-<script src="/build/vendor.bundle.js?<%= webpack.hash %>"></script>
+<script src="<%= htmlWebpackPlugin.files.publicPath %>vendor.bundle.js?<%= webpack.hash %>"></script>
 <% Object.keys(htmlWebpackPlugin.files.chunks).sort().forEach(function(chunkId) { %>
 <script src="<%= htmlWebpackPlugin.files.chunks[chunkId].entry %>"></script>
 <% }); %>
