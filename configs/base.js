@@ -44,9 +44,10 @@ const processEnvConsts = (nconf.get('SUPPORTED_APPS') || [])
 
 module.exports = function (config, options) {
 
+	let projectPackage;
 	let projectName = 'Web Project';
 	try {
-		const projectPackage = require(path.resolve(options.projectDirName, 'package.json'));
+		projectPackage = require(path.resolve(options.projectDirName, 'package.json'));
 		projectName = 'dev | ' + projectPackage.name;
 	} catch (error) {
 		console.error(error);
@@ -125,9 +126,12 @@ module.exports = function (config, options) {
 		if (devserver) {
 			entry.unshift(
 				'webpack/hot/dev-server',
-				'webpack-dev-server/client?http://localhost:' + PORT,
-				'react-hot-loader/patch'
+				'webpack-dev-server/client?http://localhost:' + PORT
 			);
+			const isReactApp = _.get(projectPackage, 'dependencies.react', false);
+			if (isReactApp) {
+				entry.unshift('react-hot-loader/patch');
+			}
 		}
 		if (!babelPolyfillAlreadyIncluded) {
 			babelPolyfillAlreadyIncluded = true;
@@ -173,14 +177,23 @@ module.exports = function (config, options) {
 			}
 		}),
 		new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /(en-gb)/),
-		new HtmlWebpackPlugin({
-			title: projectName,
-			filename: path.resolve(options.projectDirName, 'public/index.html'),
-			template: '!!ejs-loader!src/templates/index.ejs',
-			inject: false,
-			hash: true,
-		}),
 	];
+
+	try {
+		fs.statSync(path.resolve(options.projectDirName, 'src/templates/index.ejs'));
+		plugins.push(
+			new HtmlWebpackPlugin({
+				title: projectName,
+				filename: path.resolve(options.projectDirName, 'public/index.html'),
+				template: '!!ejs-loader!src/templates/index.ejs',
+				inject: false,
+				hash: true,
+			})
+		)
+	} catch (e) {
+		// do nothing
+	}
+
 
 	var devHtmlPath = path.resolve(
 		_.get(
