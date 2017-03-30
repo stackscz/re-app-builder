@@ -7,7 +7,6 @@ Enables your `react` ES6 web project to be built with `webpack` out of the box w
 1. `cd` into your clean project directory and run
 
 
-    npm init
     yarn add --dev re-app-builder
 
 

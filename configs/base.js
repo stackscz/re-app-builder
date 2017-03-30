@@ -72,6 +72,7 @@ module.exports = function (config, options) {
 				filename: '[name].js',
 				path: outputPath,
 				pathinfo: true,
+				publicPath,
 			},
 			devServer: {
 				historyApiFallback: {
