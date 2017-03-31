@@ -4,7 +4,7 @@
 import sum from './sum';
 console.log(sum(2, 2));
 
-// generally all ESX features, e.g. object spread.
+// >=ES6 features, e.g. object spread.
 const a = { name: 'a', color: 'blue' };
 const b = {
 	...a,
