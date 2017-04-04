@@ -77,7 +77,7 @@ vendorPromise.then(function () {
 					console.error(err || stats.toString());
 					return;
 				}
-				console.log('built');
+				console.log('build');
 			});
 			break;
 		default:
