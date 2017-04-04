@@ -4,38 +4,11 @@ var webpack = require('webpack');
 var _ = require('lodash');
 var path = require('path');
 var fs = require('fs');
-var nconf = require('nconf');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var precss = require('precss');
 var autoprefixer = require('autoprefixer');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-
-const processEnvConsts = (nconf.get('SUPPORTED_APPS') || [])
-	.reduce(
-		(acc, appModuleName) => {
-			const suffix = appModuleName
-				.replace('one-app-', '')
-				.replace(/-/g, '_')
-				.toUpperCase();
-
-			// Each prop like `SUPPORTED_APPS_RULES: "true"` for `one-app-rules` etc.
-			const key = `SUPPORTED_APPS_${suffix}`;
-
-			acc[key] = JSON.stringify(true);
-
-			return acc;
-		},
-		{
-			DEVSERVER: JSON.stringify(process.env.DEVSERVER || false),
-			REDUX_LOGGING_ENABLED: JSON.stringify(nconf.get('REDUX_LOGGING_ENABLED') || false),
-			DEBUG_LOGGING_ENABLED: JSON.stringify(nconf.get('DEBUG_LOGGING_ENABLED') || false),
-			REACT_PERF_ENABLED_ENABLED: JSON.stringify(nconf.get('REACT_PERF_ENABLED_ENABLED') || false),
-			DELAY_RESOURCE_SERVICE_RESPONSE: JSON.stringify(nconf.get('DELAY_RESOURCE_SERVICE_RESPONSE') || process.env.DELAY_RESOURCE_SERVICE_RESPONSE || false),
-			NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'production'),
-			ENABLE_MOCKS: JSON.stringify(process.env.ENABLE_MOCKS === 'true'),
-		}
-	);
 
 module.exports = function (config, options) {
 
@@ -50,12 +23,23 @@ module.exports = function (config, options) {
 	}
 	const isReactApp = _.get(projectPackage, 'dependencies.react', false);
 
+    let processEnvConsts = Object.assign({}, process.env, {
+        DEVSERVER: process.env.DEVSERVER || false,
+        REDUX_LOGGING_ENABLED: process.env.REDUX_LOGGING_ENABLED || false,
+        DEBUG_LOGGING_ENABLED: process.env.DEBUG_LOGGING_ENABLED || false,
+        REACT_PERF_ENABLED_ENABLED: process.env.REACT_PERF_ENABLED_ENABLED || false,
+        DELAY_RESOURCE_SERVICE_RESPONSE: process.env.DELAY_RESOURCE_SERVICE_RESPONSE || false,
+        NODE_ENV: process.env.NODE_ENV || 'production',
+    });
 
-	nconf.env().file(path.resolve(options.projectDirName, '.env.json'));
+    processEnvConsts = _.mapValues(processEnvConsts, (a) => {
+        return JSON.stringify(a);
+    });
 
 	const PORT = _.get(config, 'devServer.port', 8080);
-	const PUBLIC_PATH = '/build/';
-	const publicPath = _.get(config, 'output.publicPath', PUBLIC_PATH);
+	const HOST = _.get(config, 'devServer.host', '0.0.0.0');
+
+	const publicPath = _.get(config, 'output.publicPath', '/build/');
 	const publicPathMatch = publicPath.replace(/^\//, '').replace(/\/$/, '');
 	const rewriteRegex = new RegExp('^\/(?!(' + publicPathMatch + '|favicon|swagger|config\.js|examples)).*', 'g');
 
@@ -81,7 +65,7 @@ module.exports = function (config, options) {
 				},
 				contentBase: path.resolve(options.projectDirName, _.get(config, 'devServer.contentBase', 'public')),
 				publicPath,
-				host: '0.0.0.0',
+				host: HOST,
 				port: PORT,
 				hot: true,
 				inline: false,
@@ -96,7 +80,7 @@ module.exports = function (config, options) {
 				proxy: _.assign({
 					'/api/**': {
 						changeOrigin: true,
-						target: nconf.get('API_URL'),
+						target: process.env.API_URL,
 						onError: () => ({}),
 					},
 				}, _.get(config, 'devServer.proxy', {})),
