@@ -174,7 +174,7 @@ module.exports = function (config, options) {
 				output: config.output,
 				postcss: function () {
 					return [precss, autoprefixer];
-				}
+				},
 			}
 		}),
 		new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /(en-gb)/),
@@ -378,9 +378,32 @@ module.exports = function (config, options) {
 		// Images loaders
 		{
 			test: /\.(jpe?g|png|gif|svg)$/i,
-			loaders: [
-				'url-loader?limit=8192&name=[hash].[ext]',
-				'image-webpack-loader?bypassOnDebug&optimizationLevel=7&interlaced=false'
+			use: [
+				{
+					loader:'url-loader',
+					options: {
+						limit: 8192,
+						name: '[hash].[ext]',
+					}
+				},
+				{
+					loader: 'image-webpack-loader',
+					options: {
+						mozjpeg: {
+							progressive: true,
+						},
+						gifsicle: {
+							interlaced: false,
+						},
+						optipng: {
+							optimizationLevel: 7,
+						},
+						pngquant: {
+							quality: '75-90',
+							speed: 3,
+						},
+					}
+				},
 			]
 		}
 	].concat(_.get(config, 'module.rules', []));
