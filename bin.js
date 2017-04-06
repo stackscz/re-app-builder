@@ -13,8 +13,8 @@ const [_1, _2, command] = process.argv;
 const devserver = command === 'dev' || _.startsWith(command, 'dev:');
 
 let userConfig = userConfigFactory;
-if(_.isFunction(userConfigFactory)) {
-	userConfig = userConfigFactory(); // TODO pass environment, https://gitlab.stacks.cz/brabeji/re-app-builder/issues/2
+if (_.isFunction(userConfigFactory)) {
+	userConfig = userConfigFactory({ devserver: devserver }); // TODO pass environment, https://gitlab.stacks.cz/brabeji/re-app-builder/issues/2
 }
 
 const vendorPromise = new Promise(function (resolve, reject) {
