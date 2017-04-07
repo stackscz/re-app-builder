@@ -2,3 +2,4 @@ node_modules
 npm-debug.log
 manifest
 public/build
+/webpack.config.private.js

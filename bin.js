@@ -17,6 +17,20 @@ if (_.isFunction(userConfigFactory)) {
 	userConfig = userConfigFactory({ devserver: devserver }); // TODO pass environment, https://gitlab.stacks.cz/brabeji/re-app-builder/issues/2
 }
 
+try {
+    const userPrivateConfigFactory = require(path.resolve(projectDirName, 'webpack.config.private.js'));
+
+    let userPrivateConfig = userPrivateConfigFactory;
+    if(_.isFunction(userPrivateConfigFactory)) {
+        userPrivateConfig = userPrivateConfigFactory();
+    }
+
+    userConfig = _.merge(userConfig, userPrivateConfig);
+
+} catch (ex) {
+}
+
+
 const vendorPromise = new Promise(function (resolve, reject) {
 
 	switch (command) {

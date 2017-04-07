@@ -55,6 +55,21 @@ Create your `webpack.config.js`.
 With the configuration above, `./src/index.js` will be used as an entry point of your app
 and `./public/build/app.js` will be generated as an output. 
 
+Optionally create your `webpack.config.private.js`.
+
+    // webpack.config.private.js
+    // This config is webpack-compatible
+    // and overrides the defaults provided by re-app-builder and webpack.config.js
+    module.exports = function () {
+    	return {
+    		devServer: {
+    			port: 8081,
+    		},
+    	};
+    };
+
+With the configuration above, dev server will be running on port 8081. 
+
 Start development server by running the script you added earlier with `dev` command
 
 
