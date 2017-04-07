@@ -4,43 +4,13 @@ var webpack = require('webpack');
 var _ = require('lodash');
 var path = require('path');
 var fs = require('fs');
-var nconf = require('nconf');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var precss = require('precss');
 var autoprefixer = require('autoprefixer');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+var env = require('node-env-file');
 
-const processEnvConsts = (nconf.get('SUPPORTED_APPS') || [])
-	.reduce(
-		(acc, appModuleName) => {
-			const suffix = appModuleName
-				.replace('one-app-', '')
-				.replace(/-/g, '_')
-				.toUpperCase();
-
-			// Each prop like `SUPPORTED_APPS_RULES: "true"` for `one-app-rules` etc.
-			const key = `SUPPORTED_APPS_${suffix}`;
-
-			acc[key] = JSON.stringify(true);
-
-			return acc;
-		},
-		{
-			DEVSERVER: JSON.stringify(process.env.DEVSERVER || false),
-			REDUX_LOGGING_ENABLED: JSON.stringify(nconf.get('REDUX_LOGGING_ENABLED') || false),
-			DEBUG_LOGGING_ENABLED: JSON.stringify(nconf.get('DEBUG_LOGGING_ENABLED') || false),
-			REACT_PERF_ENABLED_ENABLED: JSON.stringify(nconf.get('REACT_PERF_ENABLED_ENABLED') || false),
-			DELAY_RESOURCE_SERVICE_RESPONSE: JSON.stringify(nconf.get('DELAY_RESOURCE_SERVICE_RESPONSE') || false),
-			NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'production'),
-			API_SERVER_HOST: JSON.stringify(process.env.API_SERVER_HOST),
-			API_SERVER_PORT: JSON.stringify(process.env.API_SERVER_PORT),
-			API_SERVER_SSL: JSON.stringify(process.env.API_SERVER_SSL),
-			SUPPORTED_APPS: JSON.stringify(nconf.get('SUPPORTED_APPS') || []),
-			// These app-specific consts need to be here - otherwise the app is included in the build all the time.
-			SUPPORTED_APPS_RULES: JSON.stringify(false),
-		}
-	);
 
 module.exports = function (config, options) {
 
@@ -54,12 +24,25 @@ module.exports = function (config, options) {
 		return;
 	}
 
+	env(path.resolve(options.projectDirName, '.env'));
 
-	nconf.env().file(path.resolve(options.projectDirName, '.env.json'));
+    let processEnvConsts = Object.assign({}, process.env, {
+        DEVSERVER: process.env.DEVSERVER || false,
+        REDUX_LOGGING_ENABLED: process.env.REDUX_LOGGING_ENABLED || false,
+        DEBUG_LOGGING_ENABLED: process.env.DEBUG_LOGGING_ENABLED || false,
+        REACT_PERF_ENABLED_ENABLED: process.env.REACT_PERF_ENABLED_ENABLED || false,
+        DELAY_RESOURCE_SERVICE_RESPONSE: process.env.DELAY_RESOURCE_SERVICE_RESPONSE || false,
+        NODE_ENV: process.env.NODE_ENV || 'production',
+    });
 
-	const PORT = _.get(config, 'devServer.port', 8080);
-	const PUBLIC_PATH = '/build/';
-	const publicPath = _.get(config, 'output.publicPath', PUBLIC_PATH);
+    processEnvConsts = _.mapValues(processEnvConsts, (a) => {
+        return JSON.stringify(a);
+    });
+
+	const PORT = parseInt(process.env.PORT) || _.get(config, 'devServer.port', 8080);
+	const HOST = process.env.HOST || _.get(config, 'devServer.host', '0.0.0.0');
+
+	const publicPath = process.env.PUBLIC_PATH || _.get(config, 'output.publicPath', '/build/');
 	const publicPathMatch = publicPath.replace(/^\//, '').replace(/\/$/, '');
 	const rewriteRegex = new RegExp('^\/(?!(' + publicPathMatch + '|favicon|swagger|config\.js|examples)).*', 'g');
 
@@ -87,7 +70,7 @@ module.exports = function (config, options) {
 				},
 				contentBase: path.resolve(options.projectDirName, _.get(config, 'devServer.contentBase', 'public')),
 				publicPath,
-				host: '0.0.0.0',
+				host: HOST,
 				port: PORT,
 				hot: true,
 				inline: false,
@@ -102,7 +85,7 @@ module.exports = function (config, options) {
 				proxy: _.assign({
 					'/api/**': {
 						changeOrigin: true,
-						target: nconf.get('API_URL'),
+						target: process.env.API_URL,
 						onError: () => ({}),
 					},
 				}, _.get(config, 'devServer.proxy', {})),

@@ -2,7 +2,8 @@
  "scripts": {
   "ab": "node ./node_modules/re-app-builder/bin",
   "dev": "NODE_ENV=development npm run ab dev",
-  "build": "NODE_ENV=development npm run ab build"
+  "build": "NODE_ENV=development npm run ab build",
+  "build:prod": "NODE_ENV=production npm run ab build"
  },
  "devDependencies": {
   "re-app-builder": "^1.0.0-dev.26"
