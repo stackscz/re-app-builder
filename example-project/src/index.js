@@ -36,7 +36,9 @@ while(!generatedLyric.done) {
 }
 
 // images
-import holderImage from './img/example.png';
+import holderImagePng from './img/example.png';
+import holderImageJpg from './img/example.jpg';
+import holderImageGif from './img/example.gif';
 
 // react, jsx
 import React from 'react';
@@ -51,15 +53,28 @@ ReactDOM.render(
 	<div className="example">
 		<Hello who="World" /><br />
 		<Hello who="Darkness, my old friend" />
-		<div>
-			<img src={holderImage} alt="Some nonsense" />
+		<div className="exampleSass">
+			png
+			<img src={holderImagePng} alt="Some nonsense" />
+		</div>
+		<div className="exampleScss">
+			jpg
+			<img src={holderImageJpg} alt="Some nonsense" />
+		</div>
+		<div className="exampleCss">
+			gif
+			<img src={holderImageGif} alt="Some nonsense" />
 		</div>
 		<div className="example-image" />
 	</div>,
 	document.getElementById('root')
 );
 
-// Sass
+// sass
 import './styles/index.sass';
+// scss
+import './styles/index.scss';
+// css
+import './styles/index.css';
 
 // TODO

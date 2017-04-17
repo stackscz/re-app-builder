@@ -31,14 +31,8 @@ const processEnvConsts = (nconf.get('SUPPORTED_APPS') || [])
 			REDUX_LOGGING_ENABLED: JSON.stringify(nconf.get('REDUX_LOGGING_ENABLED') || false),
 			DEBUG_LOGGING_ENABLED: JSON.stringify(nconf.get('DEBUG_LOGGING_ENABLED') || false),
 			REACT_PERF_ENABLED_ENABLED: JSON.stringify(nconf.get('REACT_PERF_ENABLED_ENABLED') || false),
-			DELAY_RESOURCE_SERVICE_RESPONSE: JSON.stringify(nconf.get('DELAY_RESOURCE_SERVICE_RESPONSE') || false),
+			DELAY_RESOURCE_SERVICE_RESPONSE: JSON.stringify(nconf.get('DELAY_RESOURCE_SERVICE_RESPONSE') || process.env.DELAY_RESOURCE_SERVICE_RESPONSE || false),
 			NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'production'),
-			API_SERVER_HOST: JSON.stringify(process.env.API_SERVER_HOST),
-			API_SERVER_PORT: JSON.stringify(process.env.API_SERVER_PORT),
-			API_SERVER_SSL: JSON.stringify(process.env.API_SERVER_SSL),
-			SUPPORTED_APPS: JSON.stringify(nconf.get('SUPPORTED_APPS') || []),
-			// These app-specific consts need to be here - otherwise the app is included in the build all the time.
-			SUPPORTED_APPS_RULES: JSON.stringify(false),
 		}
 	);
 
@@ -53,6 +47,7 @@ module.exports = function (config, options) {
 		console.error(error);
 		return;
 	}
+	const isReactApp = _.get(projectPackage, 'dependencies.react', false);
 
 
 	nconf.env().file(path.resolve(options.projectDirName, '.env.json'));
@@ -129,10 +124,9 @@ module.exports = function (config, options) {
 				'webpack/hot/dev-server',
 				'webpack-dev-server/client?http://localhost:' + PORT
 			);
-			const isReactApp = _.get(projectPackage, 'dependencies.react', false);
-			if (isReactApp) {
-				entry.unshift('react-hot-loader/patch');
-			}
+			// if (isReactApp) {
+			// 	entry.unshift('react-hot-loader/patch');
+			// }
 		}
 		if (!babelPolyfillAlreadyIncluded) {
 			babelPolyfillAlreadyIncluded = true;
@@ -247,140 +241,113 @@ module.exports = function (config, options) {
 		);
 	}
 
+	var stylesheetLoaderConfigs = {
+		css: [
+			{
+				loader: 'css-loader',
+				options: {
+					minimize: process.env.NODE_ENV === 'production',
+				},
+			},
+			'postcss-loader',
+		],
+		less: [
+			{
+				loader: 'css-loader',
+				options: {
+					minimize: process.env.NODE_ENV === 'production',
+				},
+			},
+			{
+				loader: 'postcss-loader',
+			},
+			{
+				loader: 'less-loader',
+			},
+		],
+		sass: [
+			{
+				loader: 'css-loader',
+				options: {
+					minimize: process.env.NODE_ENV === 'production',
+				},
+			},
+			{
+				loader: 'postcss-loader',
+			},
+			{
+				loader: 'resolve-url-loader',
+			},
+			{
+				loader: 'sass-loader',
+				options: {
+					sourceMap: true,
+				},
+			},
+		],
+	};
+
+	function wrapStylesheetLoaderConfig(config, devserver) {
+		if (devserver) {
+			config.unshift('style-loader');
+			return config;
+		}
+		return ExtractTextPlugin.extract({
+			fallback: 'style-loader',
+			use: config,
+		});
+	}
+
 	var rules = [
 		{
 			test: /\.(js|jsx)$/,
-			loaders: [
+			use: [
 				'babel-loader?babelrc=false&extends=' + path.resolve(options.projectDirName, '.babelrc')
 			],
-			// exclude: /(node_modules|bower_components)/,
-			include: [
-				path.resolve(options.projectDirName, 'node_modules', 'generic-pool'),
-				path.resolve(options.projectDirName, 'src'),
-				path.resolve(options.projectDirName, 'specs'),
-				path.resolve(options.projectDirName, 'examples'),
-				path.resolve(options.projectDirName, 'initialState.js'),
-				// path.join(options.projectDirName, 'node_modules', 'generic-pool'),
-			]
+			exclude: /(node_modules|bower_components)/,
 		},
 		{
 			test: /\.json$/,
-			loader: 'json-loader'
+			use: 'json-loader'
 		},
 		{
 			test: /\.css$/,
-			loaders: devserver ? (
-				[
-					'style-loader',
-					'css-loader',
-					'postcss-loader',
-				]
-			) : (
-				         ExtractTextPlugin.extract({
-					         fallbackLoader: 'style-loader',
-					         loader: [
-						         {
-							         loader: 'css-loader',
-							         query: {
-								         minimize: true,
-							         },
-						         },
-						         {
-							         loader: 'postcss-loader',
-						         },
-					         ]
-				         })
-			         ),
+			use: wrapStylesheetLoaderConfig(stylesheetLoaderConfigs.css, devserver),
 		},
 		{
 			test: /\.less/,
-			loader: devserver ? (
-				[
-					'style-loader',
-					'css-loader',
-					'postcss-loader',
-					'less-loader',
-				]
-			) : (
-				        ExtractTextPlugin.extract({
-					        fallbackLoader: 'style-loader',
-					        loader: [
-						        {
-							        loader: 'css-loader',
-							        query: {
-								        minimize: true,
-							        },
-						        },
-						        {
-							        loader: 'postcss-loader',
-						        },
-						        {
-							        loader: 'less-loader',
-						        },
-					        ],
-				        })
-			        )
+			use: wrapStylesheetLoaderConfig(stylesheetLoaderConfigs.less, devserver),
 		},
 		{
-			test: /\.sass/,
-			loader: devserver ? (
-				['style-loader', 'css-loader', 'postcss-loader', 'resolve-url-loader', {
-					loader: 'sass-loader',
-					query: { sourceMap: true }
-				}]
-			) : (
-				        ExtractTextPlugin.extract({
-					        fallbackLoader: 'style-loader',
-					        loader: [
-						        {
-							        loader: 'css-loader',
-							        query: {
-								        minimize: true,
-							        },
-						        },
-						        {
-							        loader: 'postcss-loader',
-						        },
-						        {
-							        loader: 'resolve-url-loader',
-						        },
-						        {
-							        loader: 'sass-loader',
-							        query: {
-								        sourceMap: true,
-							        },
-						        },
-					        ],
-				        })
-			        )
+			test: /\.s[ac]ss/,
+			use: wrapStylesheetLoaderConfig(stylesheetLoaderConfigs.sass, devserver),
 		},
 
 
 		// Fonts loaders
 		{
 			test: /\.(woff(2)?)(\?[a-z0-9\.=\-]+)?$/,
-			loader: "url-loader?limit=16384&name=fonts/[hash].[ext]&mimetype=application/font-woff"
+			use: "url-loader?limit=16384&name=fonts/[hash].[ext]&mimetype=application/font-woff"
 		},
 		{
 			test: /\.(ttf)(\?[A-Za-z0-9&#\.=\-]+)?$/,
-			loader: "url-loader?limit=16384&name=fonts/[hash].[ext]"
+			use: "url-loader?limit=16384&name=fonts/[hash].[ext]"
 		},
 		{
 			test: /\.(eot)(\?[a-z0-9\.=\-]+)?$/,
-			loader: "url-loader?limit=16384&name=fonts/[hash].[ext]"
+			use: "url-loader?limit=16384&name=fonts/[hash].[ext]"
 		},
 		{
 			test: /\.(svg)(\?[a-z0-9\.=\-]+)$/,
-			loader: "file-loader?limit=16384&name=fonts/[hash].[ext]"
+			use: "file-loader?limit=16384&name=fonts/[hash].[ext]"
 		},
-
 
 		// Images loaders
 		{
 			test: /\.(jpe?g|png|gif|svg)$/i,
 			use: [
 				{
-					loader:'url-loader',
+					loader: 'url-loader',
 					options: {
 						limit: 8192,
 						name: '[hash].[ext]',
@@ -408,6 +375,11 @@ module.exports = function (config, options) {
 		}
 	].concat(_.get(config, 'module.rules', []));
 
+	// if (devserver && isReactApp) {
+	// 	rules[0].use.unshift('react-hot-loader/webpack')
+	// }
+
+
 	var babelRuntimePath = path.resolve(__dirname, '..', 'node_modules', 'babel-runtime');
 	try {
 		fs.statSync(babelRuntimePath)
@@ -416,6 +388,9 @@ module.exports = function (config, options) {
 	}
 
 	return {
+		node: {
+			fs: 'empty',
+		},
 		devtool: false, //devserver ? 'cheap-module-eval-source-map' : false,
 		entry: config.entry,
 		output: config.output,
