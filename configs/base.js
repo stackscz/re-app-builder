@@ -33,6 +33,7 @@ const processEnvConsts = (nconf.get('SUPPORTED_APPS') || [])
 			REACT_PERF_ENABLED_ENABLED: JSON.stringify(nconf.get('REACT_PERF_ENABLED_ENABLED') || false),
 			DELAY_RESOURCE_SERVICE_RESPONSE: JSON.stringify(nconf.get('DELAY_RESOURCE_SERVICE_RESPONSE') || process.env.DELAY_RESOURCE_SERVICE_RESPONSE || false),
 			NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'production'),
+			ENABLE_MOCKS: JSON.stringify(process.env.ENABLE_MOCKS === 'true'),
 		}
 	);
 
