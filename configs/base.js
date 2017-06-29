@@ -73,9 +73,7 @@ module.exports = function (config, options) {
 			devServer: {
 				historyApiFallback: {
 					index: 'index-dev.html',
-					rewrites: [
-						{ from: rewriteRegex, to: '/' + publicPathMatch + '/index-dev.html' },
-					],
+					rewrites: [],
 				},
 				staticOptions: {
 					fallthrough: true,
@@ -105,6 +103,7 @@ module.exports = function (config, options) {
 			},
 		}
 	);
+	config.devServer.historyApiFallback.rewrites.push({ from: rewriteRegex, to: '/' + publicPathMatch + '/index-dev.html' })
 
 	const devserver = options.devserver;
 
@@ -241,6 +240,8 @@ module.exports = function (config, options) {
 			new webpack.optimize.AggressiveMergingPlugin()
 		);
 	}
+
+	plugins.push(...(config.plugins || []));
 
 	var stylesheetLoaderConfigs = {
 		css: [
