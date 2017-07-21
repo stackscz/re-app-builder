@@ -23,18 +23,18 @@ module.exports = function (config, options) {
 	}
 	const isReactApp = _.get(projectPackage, 'dependencies.react', false);
 
-    let processEnvConsts = Object.assign({}, process.env, {
-        DEVSERVER: process.env.DEVSERVER || false,
-        REDUX_LOGGING_ENABLED: process.env.REDUX_LOGGING_ENABLED || false,
-        DEBUG_LOGGING_ENABLED: process.env.DEBUG_LOGGING_ENABLED || false,
-        REACT_PERF_ENABLED_ENABLED: process.env.REACT_PERF_ENABLED_ENABLED || false,
-        DELAY_RESOURCE_SERVICE_RESPONSE: process.env.DELAY_RESOURCE_SERVICE_RESPONSE || false,
-        NODE_ENV: process.env.NODE_ENV || 'production',
-    });
+	let processEnvConsts = Object.assign({}, process.env, {
+		DEVSERVER: process.env.DEVSERVER || false,
+		REDUX_LOGGING_ENABLED: process.env.REDUX_LOGGING_ENABLED || false,
+		DEBUG_LOGGING_ENABLED: process.env.DEBUG_LOGGING_ENABLED || false,
+		REACT_PERF_ENABLED_ENABLED: process.env.REACT_PERF_ENABLED_ENABLED || false,
+		DELAY_RESOURCE_SERVICE_RESPONSE: process.env.DELAY_RESOURCE_SERVICE_RESPONSE || false,
+		NODE_ENV: process.env.NODE_ENV || 'production',
+	});
 
-    processEnvConsts = _.mapValues(processEnvConsts, (a) => {
-        return JSON.stringify(a);
-    });
+	processEnvConsts = _.mapValues(processEnvConsts, (a) => {
+		return JSON.stringify(a);
+	});
 
 	const PORT = _.get(config, 'devServer.port', 8080);
 	const HOST = _.get(config, 'devServer.host', '0.0.0.0');
@@ -87,7 +87,10 @@ module.exports = function (config, options) {
 			},
 		}
 	);
-	config.devServer.historyApiFallback.rewrites.push({ from: rewriteRegex, to: '/' + publicPathMatch + '/index-dev.html' })
+	config.devServer.historyApiFallback.rewrites.push({
+		from: rewriteRegex,
+		to: '/' + publicPathMatch + '/index-dev.html'
+	})
 
 	const devserver = options.devserver;
 
@@ -158,21 +161,22 @@ module.exports = function (config, options) {
 		new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /(en-gb)/),
 	];
 
-	try {
-		fs.statSync(path.resolve(options.projectDirName, 'src/templates/index.ejs'));
-		plugins.push(
-			new HtmlWebpackPlugin({
-				title: projectName,
-				filename: path.resolve(options.projectDirName, 'public/index.html'),
-				template: '!!ejs-loader!src/templates/index.ejs',
-				inject: false,
-				hash: true,
-			})
-		)
-	} catch (e) {
-		// do nothing
+	if (!config.disableHtmlBuild) {
+		try {
+			fs.statSync(path.resolve(options.projectDirName, 'src/templates/index.ejs'));
+			plugins.push(
+				new HtmlWebpackPlugin({
+					title: projectName,
+					filename: path.resolve(options.projectDirName, 'public/index.html'),
+					template: '!!ejs-loader!src/templates/index.ejs',
+					inject: false,
+					hash: true,
+				})
+			)
+		} catch (e) {
+			// do nothing
+		}
 	}
-
 
 	var devHtmlPath = path.resolve(
 		_.get(
