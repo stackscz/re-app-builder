@@ -39,31 +39,5 @@
 	"transform-runtime",
 	"tcomb",
 	"transform-flow-strip-types"
-  ],
-  "env": {
-	"dev": {
-	  "plugins": [
-		"react-hot-loader/babel"
-	  ]
-	},
-	"production": {
-	  "plugins": [
-		"transform-remove-console"
-	  ]
-	},
-	"test": {
-	  "plugins": [
-		[
-		  "module-resolver",
-		  {
-			"root": [
-			  "./"
-			],
-			"alias": {
-			}
-		  }
-		]
-	  ]
-	}
-  }
+  ]
 }

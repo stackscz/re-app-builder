@@ -1,6 +1,6 @@
 {
 	"name": "re-app-builder",
-	"version": "1.0.0-dev.31",
+	"version": "1.0.0-dev.32",
 	"description": "Webpack build tool for react",
 	"main": "bin.js",
 	"scripts": {
