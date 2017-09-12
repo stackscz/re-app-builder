@@ -7,7 +7,7 @@ module.exports = ({ baseConfig, projectRootDirectory, isDevServer }) => {
 		module: {
 			rules: [
 				{
-					test: /\.(jpe?g|png|gif|svg)$/i,
+					test: /\.(png|svg)$/i,
 					use: [
 						{
 							loader: 'url-loader',

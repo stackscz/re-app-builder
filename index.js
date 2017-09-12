@@ -43,7 +43,7 @@ if (isFunction(userConfig)) {
 } else {
 	finalConfig = webpackMerge(baseConfig, userConfig);
 }
-console.log(JSON.stringify(finalConfig, null, 2));
+// console.log(JSON.stringify(finalConfig, null, 2));
 
 
 
