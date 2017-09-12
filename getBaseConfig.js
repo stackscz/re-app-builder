@@ -1,14 +1,28 @@
+const path = require('path');
+const webpack = require('webpack');
 const mergeSassFeatureConfig = require('./features/sass');
+const mergeImagesFeatureConfig = require('./features/images');
 
-module.exports = ({ isDevServer = false }) => {
+module.exports = ({ projectRootDirectory, isDevServer = false }) => {
+
+	const plugins = [];
+
+	if (process.env.NODE_ENV === 'production') {
+		plugins.push(
+			new webpack.optimize.UglifyJsPlugin({
+				compress: {
+					warnings: true
+				}
+			})
+		);
+		plugins.push(
+			new webpack.optimize.AggressiveMergingPlugin()
+		);
+	}
 
 	let baseConfig = {
-		plugins: [
-
-		],
-		devServer: {
-			hot: true,
-		},
+		plugins,
+		devServer: {},
 		resolveLoader: {
 			modules: [
 				'node_modules',
@@ -17,7 +31,8 @@ module.exports = ({ isDevServer = false }) => {
 		},
 	};
 
-	baseConfig = mergeSassFeatureConfig({ baseConfig, isDevServer });
+	baseConfig = mergeSassFeatureConfig({ baseConfig, isDevServer, projectRootDirectory });
+	baseConfig = mergeImagesFeatureConfig({ baseConfig, isDevServer, projectRootDirectory });
 
 	return baseConfig;
 

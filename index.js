@@ -34,6 +34,7 @@ if (isFunction(userConfig)) {
 	const options = {
 		projectRootDirectory,
 		baseConfig,
+		isDevServer,
 		mergeWithBaseConfig: (userConfigInput) => {
 			return webpackMerge(baseConfig, userConfigInput)
 		}

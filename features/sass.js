@@ -1,11 +1,10 @@
+const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const webpackMerge = require('webpack-merge');
+const precss = require('precss');
+const autoprefixer = require('autoprefixer');
 
-module.exports = ({ baseConfig, isDevServer }) => {
-
-	console.log();
-	console.log(isDevServer);
-	console.log();
+module.exports = ({ baseConfig, projectRootDirectory, isDevServer }) => {
 
 	const extractSass = new ExtractTextPlugin(
 		{
@@ -24,11 +23,24 @@ module.exports = ({ baseConfig, isDevServer }) => {
 						{
 							use: [
 								{
-									loader: "css-loader"
+									loader: "css-loader",
+									options: {
+										minimize: process.env.NODE_ENV === 'production',
+									},
+								},
+								// {
+								// 	loader: 'postcss-loader',
+								// 	options: { plugins: [autoprefixer, precss] }
+								// },
+								{
+									loader: "resolve-url-loader"
 								},
 								{
-									loader: "sass-loader"
-								}
+									loader: "sass-loader",
+									options: {
+										sourceMap: true,
+									},
+								},
 							],
 							// use style-loader in development
 							fallback: "style-loader"
@@ -38,7 +50,17 @@ module.exports = ({ baseConfig, isDevServer }) => {
 			]
 		},
 		plugins: [
-			extractSass
+			extractSass,
+			// new webpack.LoaderOptionsPlugin(
+			// 	{
+			// 		options: {
+			// 			context: projectRootDirectory,
+			// 			postcss: function () {
+			// 				return [precss, autoprefixer];
+			// 			},
+			// 		}
+			// 	}
+			// ),
 		],
 	};
 
