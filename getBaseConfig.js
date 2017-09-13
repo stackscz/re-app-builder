@@ -27,8 +27,14 @@ module.exports = ({ projectRootDirectory, isDevServer = false }) => {
 	let baseConfig = {
 		node: { fs: 'empty' }, // workaround bug in css-loader
 		plugins,
+		stats: {
+			colors: true,
+		},
 		devServer: {
-			contentBase: './public/'
+			contentBase: './public/',
+			stats: {
+				colors: true,
+			},
 		},
 		resolveLoader: {
 			modules: [
