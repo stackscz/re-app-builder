@@ -2,10 +2,14 @@ const path = require('path');
 const webpack = require('webpack');
 const mergeSassFeatureConfig = require('./features/sass');
 const mergeImagesFeatureConfig = require('./features/images');
+const mergeEs7FeatureConfig = require('./features/es7');
 
 module.exports = ({ projectRootDirectory, isDevServer = false }) => {
 
-	const plugins = [];
+	const plugins = [
+		new webpack.optimize.ModuleConcatenationPlugin(),
+		new webpack.EnvironmentPlugin({ NODE_ENV: 'production' }),
+	];
 
 	if (process.env.NODE_ENV === 'production') {
 		plugins.push(
@@ -21,8 +25,11 @@ module.exports = ({ projectRootDirectory, isDevServer = false }) => {
 	}
 
 	let baseConfig = {
+		node: { fs: 'empty' }, // workaround bug in css-loader
 		plugins,
-		devServer: {},
+		devServer: {
+			contentBase: './public/'
+		},
 		resolveLoader: {
 			modules: [
 				'node_modules',
@@ -33,6 +40,7 @@ module.exports = ({ projectRootDirectory, isDevServer = false }) => {
 
 	baseConfig = mergeSassFeatureConfig({ baseConfig, isDevServer, projectRootDirectory });
 	baseConfig = mergeImagesFeatureConfig({ baseConfig, isDevServer, projectRootDirectory });
+	baseConfig = mergeEs7FeatureConfig({ baseConfig, isDevServer, projectRootDirectory });
 
 	return baseConfig;
 
