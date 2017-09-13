@@ -18,7 +18,7 @@ Add `re-app-builder` script to your `package.json`
     // package.json
     {
         "scripts": {
-            "re-app-builder": "node ./node_modules/re-app-builder/bin"
+            "re-app-builder": "node ./node_modules/re-app-builder"
         }
     }
 
