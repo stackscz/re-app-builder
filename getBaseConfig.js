@@ -1,6 +1,9 @@
 const path = require('path');
 const webpack = require('webpack');
 const mergeSassFeatureConfig = require('./features/sass');
+const mergeLessFeatureConfig = require('./features/less');
+const mergeCssFeatureConfig = require('./features/css');
+const mergeFontsFeatureConfig = require('./features/fonts');
 const mergeImagesFeatureConfig = require('./features/images');
 const mergeEs7FeatureConfig = require('./features/es7');
 
@@ -45,6 +48,9 @@ module.exports = ({ projectRootDirectory, isDevServer = false }) => {
 	};
 
 	baseConfig = mergeSassFeatureConfig({ baseConfig, isDevServer, projectRootDirectory });
+	baseConfig = mergeLessFeatureConfig({ baseConfig, isDevServer, projectRootDirectory });
+	baseConfig = mergeCssFeatureConfig({ baseConfig, isDevServer, projectRootDirectory });
+	baseConfig = mergeFontsFeatureConfig({ baseConfig, isDevServer, projectRootDirectory });
 	baseConfig = mergeImagesFeatureConfig({ baseConfig, isDevServer, projectRootDirectory });
 	baseConfig = mergeEs7FeatureConfig({ baseConfig, isDevServer, projectRootDirectory });
 
