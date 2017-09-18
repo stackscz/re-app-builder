@@ -1,5 +1,7 @@
 const isFunction = require('lodash/isFunction');
 const startsWith = require('lodash/startsWith');
+const isArray = require('lodash/isArray');
+const find = require('lodash/find');
 const g = require('lodash/get');
 const path = require('path');
 const webpack = require('webpack');
@@ -33,6 +35,7 @@ let finalConfig = userConfig;
 
 // produce finalConfig
 if (isFunction(userConfig)) {
+	const ForceNodeOutputFileSystemPlugin = require('./plugins/ForceNodeOutputFileSystemPlugin');
 	const mergeSassFeatureConfig = require('./features/sass');
 	const mergeEs7FeatureConfig = require('./features/es7');
 	const mergeImagesFeatureConfig = require('./features/images');
@@ -41,7 +44,7 @@ if (isFunction(userConfig)) {
 		projectRootDirectory,
 		baseConfig,
 		isDevServer,
-		mergeWithBaseConfig: (userConfigInput) => {
+		mergeWithBaseConfig: (userConfigInput, options) => {
 			return webpackMerge(baseConfig, userConfigInput)
 		},
 		mergeSassFeatureConfig,
@@ -49,38 +52,34 @@ if (isFunction(userConfig)) {
 		mergeImagesFeatureConfig,
 		mergeHtmlFeatureConfig,
 		webpack,
+		ForceNodeOutputFileSystemPlugin,
 	};
 	finalConfig = userConfig(options);
 } else {
 	finalConfig = webpackMerge(baseConfig, userConfig);
 }
-// console.log(JSON.stringify(finalConfig, null, 2));
+
+if (!isArray(finalConfig)) {
+	finalConfig = [finalConfig];
+}
 
 if (command === 'analyze') {
 	var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-	finalConfig = webpackMerge(finalConfig, { plugins: [new BundleAnalyzerPlugin()] })
+	finalConfig = finalConfig.map((config) => webpackMerge(config, { plugins: [new BundleAnalyzerPlugin()] }))
 }
 
-
-// run webpack
+// prepare webpack compiler instance
 const compiler = webpack(finalConfig);
-// const serverCallback = (error, stats) => {
-// 	if (error) {
-// 		console.log(JSON.stringify(error, null, 2));
-// 		process.exit(1);
-// 	}
-// 	const statsOutputOptions = finalConfig.stats;
-// 	console.log(stats.toString(statsOutputOptions));
-// };
 
-const port = g(finalConfig, 'devServer.port', 8080);
-const host = g(finalConfig, 'devServer.host', 'localhost');
-
+// run command
 switch (command) {
 	case 'dev':
+		const devServerConfig = find(finalConfig, (config) => {return g(config, 'devServer.contentBase')});
+		const port = g(devServerConfig, 'devServer.port', parseInt(process.env.DEV_PORT, 10));
+		const host = g(devServerConfig, 'devServer.host', 'localhost');
 		new WebpackDevServer(
 			compiler,
-			finalConfig.devServer
+			devServerConfig.devServer
 		).listen(port, host, function (err) {
 			if (err) {
 				console.log(err);
