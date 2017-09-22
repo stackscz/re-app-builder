@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const mergeSassFeatureConfig = require('./features/sass');
 const mergeLessFeatureConfig = require('./features/less');
 const mergeCssFeatureConfig = require('./features/css');
@@ -114,13 +115,15 @@ module.exports = ({ projectRootDirectory, isDevServer = false }) => {
 			modules: [
 				'node_modules',
 				'./node_modules/re-app-builder/node_modules',
-			]
+			],
 		},
 	};
 
-	baseConfig = mergeSassFeatureConfig({ baseConfig, isDevServer, projectRootDirectory });
-	baseConfig = mergeLessFeatureConfig({ baseConfig, isDevServer, projectRootDirectory });
-	baseConfig = mergeCssFeatureConfig({ baseConfig, isDevServer, projectRootDirectory });
+	const extractTextPlugin = new ExtractTextPlugin('[name].css');
+
+	baseConfig = mergeSassFeatureConfig({ baseConfig, isDevServer, projectRootDirectory, extractTextPlugin });
+	baseConfig = mergeLessFeatureConfig({ baseConfig, isDevServer, projectRootDirectory, extractTextPlugin  });
+	baseConfig = mergeCssFeatureConfig({ baseConfig, isDevServer, projectRootDirectory, extractTextPlugin  });
 	baseConfig = mergeFontsFeatureConfig({ baseConfig, isDevServer, projectRootDirectory });
 	baseConfig = mergeImagesFeatureConfig({ baseConfig, isDevServer, projectRootDirectory });
 	baseConfig = mergeEs7FeatureConfig({ baseConfig, isDevServer, projectRootDirectory });

@@ -4,12 +4,12 @@ const webpackMerge = require('webpack-merge');
 const precss = require('precss');
 const autoprefixer = require('autoprefixer');
 
-module.exports = ({ baseConfig, projectRootDirectory, isDevServer }) => {
+module.exports = ({ baseConfig, projectRootDirectory, isDevServer, extractTextPlugin }) => {
 
 	const extractSass = new ExtractTextPlugin(
 		{
-			// filename: "[name].[contenthash].css",
-			filename: "[name].css",
+			filename: "[name].[contenthash].css",
+			// filename: "[name].css",
 			disable: isDevServer,
 		}
 	);
@@ -19,7 +19,7 @@ module.exports = ({ baseConfig, projectRootDirectory, isDevServer }) => {
 			rules: [
 				{
 					test: /\.sass$/,
-					use: extractSass.extract(
+					use: ExtractTextPlugin.extract(
 						{
 							use: [
 								{
@@ -50,17 +50,7 @@ module.exports = ({ baseConfig, projectRootDirectory, isDevServer }) => {
 			]
 		},
 		plugins: [
-			extractSass,
-			// new webpack.LoaderOptionsPlugin(
-			// 	{
-			// 		options: {
-			// 			context: projectRootDirectory,
-			// 			postcss: function () {
-			// 				return [precss, autoprefixer];
-			// 			},
-			// 		}
-			// 	}
-			// ),
+			extractTextPlugin,
 		],
 	};
 

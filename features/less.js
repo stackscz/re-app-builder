@@ -4,12 +4,12 @@ const webpackMerge = require('webpack-merge');
 const precss = require('precss');
 const autoprefixer = require('autoprefixer');
 
-module.exports = ({ baseConfig, projectRootDirectory, isDevServer }) => {
+module.exports = ({ baseConfig, projectRootDirectory, isDevServer, extractTextPlugin }) => {
 
 	const extractLess = new ExtractTextPlugin(
 		{
-			// filename: "[name].[contenthash].css",
-			filename: "[name].css",
+			filename: "[name].[contenthash].css",
+			// filename: "[name].css",
 			disable: isDevServer,
 		}
 	);
@@ -19,7 +19,7 @@ module.exports = ({ baseConfig, projectRootDirectory, isDevServer }) => {
 			rules: [
 				{
 					test: /\.less/,
-					use: extractLess.extract(
+					use: ExtractTextPlugin.extract(
 						{
 							use: [
 								{
@@ -47,7 +47,7 @@ module.exports = ({ baseConfig, projectRootDirectory, isDevServer }) => {
 			]
 		},
 		plugins: [
-			extractLess,
+			extractTextPlugin,
 		],
 	};
 
