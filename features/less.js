@@ -4,7 +4,7 @@ const webpackMerge = require('webpack-merge');
 const precss = require('precss');
 const autoprefixer = require('autoprefixer');
 
-module.exports = ({ baseConfig, projectRootDirectory, isDevServer, extractTextPlugin }) => {
+module.exports = ({ baseConfig, projectRootDirectory, isDevServer }) => {
 
 	const extractLess = new ExtractTextPlugin(
 		{
@@ -46,9 +46,6 @@ module.exports = ({ baseConfig, projectRootDirectory, isDevServer, extractTextPl
 				}
 			]
 		},
-		plugins: [
-			extractTextPlugin,
-		],
 	};
 
 	return webpackMerge(baseConfig, config);

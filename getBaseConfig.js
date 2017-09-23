@@ -87,6 +87,12 @@ module.exports = ({ projectRootDirectory, isDevServer = false }) => {
 
 	const plugins = [
 		new webpack.optimize.ModuleConcatenationPlugin(),
+		new ExtractTextPlugin(
+			{
+				filename: '[name].css',
+				disable: isDevServer,
+			}
+		),
 		new webpack.EnvironmentPlugin({ NODE_ENV: 'production' }),
 	];
 
@@ -119,11 +125,9 @@ module.exports = ({ projectRootDirectory, isDevServer = false }) => {
 		},
 	};
 
-	const extractTextPlugin = new ExtractTextPlugin('[name].css');
-
-	baseConfig = mergeSassFeatureConfig({ baseConfig, isDevServer, projectRootDirectory, extractTextPlugin });
-	baseConfig = mergeLessFeatureConfig({ baseConfig, isDevServer, projectRootDirectory, extractTextPlugin  });
-	baseConfig = mergeCssFeatureConfig({ baseConfig, isDevServer, projectRootDirectory, extractTextPlugin  });
+	baseConfig = mergeSassFeatureConfig({ baseConfig, isDevServer, projectRootDirectory });
+	baseConfig = mergeLessFeatureConfig({ baseConfig, isDevServer, projectRootDirectory });
+	baseConfig = mergeCssFeatureConfig({ baseConfig, isDevServer, projectRootDirectory });
 	baseConfig = mergeFontsFeatureConfig({ baseConfig, isDevServer, projectRootDirectory });
 	baseConfig = mergeImagesFeatureConfig({ baseConfig, isDevServer, projectRootDirectory });
 	baseConfig = mergeEs7FeatureConfig({ baseConfig, isDevServer, projectRootDirectory });
