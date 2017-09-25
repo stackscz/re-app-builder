@@ -123,6 +123,14 @@ module.exports = ({ projectRootDirectory, isDevServer = false }) => {
 				'./node_modules/re-app-builder/node_modules',
 			],
 		},
+		resolve: {
+			modules: [
+				'node_modules',
+				...(isDevServer ? [
+					path.resolve(projectRootDirectory, 'node_modules')
+				] : [])
+			],
+		},
 	};
 
 	baseConfig = mergeSassFeatureConfig({ baseConfig, isDevServer, projectRootDirectory });
