@@ -3,6 +3,7 @@ const startsWith = require('lodash/startsWith');
 const isArray = require('lodash/isArray');
 const find = require('lodash/find');
 const g = require('lodash/get');
+const first = require('lodash/first');
 const path = require('path');
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
@@ -12,7 +13,8 @@ const getBaseConfig = require('./getBaseConfig');
 process.env.NODE_ENV = process.env.NODE_ENV || 'production';
 
 // parse command
-const [_1, _2, command] = process.argv;
+var argv = require('minimist')(process.argv.slice(2));
+const command = first(argv._);
 const isDevServer = command === 'dev' || startsWith(command, 'dev:');
 
 
@@ -29,7 +31,7 @@ const baseConfig = getBaseConfig(baseOptions);
 
 
 // require user config
-const userConfig = require(path.resolve(projectRootDirectory, 're-app-builder.config.js'));
+const userConfig = require(path.resolve(projectRootDirectory, argv.config || 're-app-builder.config.js'));
 let finalConfig = userConfig;
 
 
