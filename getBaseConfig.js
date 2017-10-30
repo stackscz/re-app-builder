@@ -99,6 +99,7 @@ module.exports = ({ projectRootDirectory, isDevServer = false }) => {
 	if (process.env.NODE_ENV === 'production') {
 		plugins.push(
 			new webpack.optimize.UglifyJsPlugin({
+				sourceMap: true,
 				compress: {
 					warnings: true
 				}
