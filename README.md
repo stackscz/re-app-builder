@@ -4,6 +4,10 @@ Preconfigured `webpack` packaged as library.
 Instead of cloning some "boilerplate project", install this as dev dependency and easily start
 your frontend project. 
 
+NOTE: For a quick guide read guide.md
+
+NOTE: re-app-builder is currently being re-developed. This readme file might not be perfectly up to date, if you encounter any problems or need further explanation please follow the step by step guide in `guide.md`
+
 ## Usage
 
 Install `re-app-builder` into your project or start in an empty directory!
@@ -91,6 +95,3 @@ it will create minified static files `./public/build/app.js` and `./public/build
 Whenever you need the static build but non-minified, set `NODE_ENV=development`
 
     $ NODE_ENV=development npm run re-app-builder build
-
-See [example project](./example-project) to discover all supported
- syntaxes.
