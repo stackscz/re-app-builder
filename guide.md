@@ -5,6 +5,7 @@ All the configuration files are of course customizable, code examples provided i
 This guide uses yarn (an alternative for npm) if you don't have it installed, be sure to do so. You can thank us later... ( https://yarnpkg.com/en/ )
 
 (code examples starting with `$` are bash commands)
+(this guide has content suggestions in it, if you are not sure what to exactly in created files, you can copy the suggestions)
 
 ___
 
@@ -17,6 +18,7 @@ $ yarn add --dev https://github.com/stackscz/re-app-builder#4f8b9c1423b961548445
 
 3) Add scripts to your `package.json`
 
+Content suggestion:
 ```
 // package.json
 
@@ -36,10 +38,9 @@ $ yarn add --dev https://github.com/stackscz/re-app-builder#4f8b9c1423b961548445
 }
 ```
 
-(All of these scripts are not necessary for running the dev server, but will be useful throughout the development, if you're not familiar with them, get so.)
+4) Create `.babelrc` file in the project's root directory
 
-4) Create `.babelrc` file with this content in the project's root directory
-
+Content suggestion:
 ```
 {
   "extends": "./node_modules/re-app-builder/base-babel-config.json",
@@ -77,159 +78,13 @@ $ yarn add --dev https://github.com/stackscz/re-app-builder#4f8b9c1423b961548445
 }
 ```
 
-5) Create `re-app-builder.config.js` file with this content in the project's root directory
+5) Copy `re-app-builder.config.js` from `example-project` directory to the project's root directory
 
-```
-const path = require('path')
-const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin')
-const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin')
+With this configuration `./src/index.js` will be used as an entry point of your app.
 
-module.exports = function(options) {
-  const {
-    mergeWithBaseConfig,
-    mergeHtmlFeatureConfig,
-    isDevServer,
-    webpack,
-    ForceNodeOutputFileSystemPlugin,
-  } = options
+6) In the project's root directory Create `src` folder and `index.js` file.
 
-  const vendor = Object.keys(require('./package.json').dependencies).filter(
-    m => !['client-core', 'addressfield.json'].includes(m),
-  )
-  const manifestFilePath = path.resolve(__dirname, 'manifest/manifest.json')
-
-  const output = {
-    path: path.resolve(__dirname, 'public/build'),
-    publicPath: '/build/',
-  }
-
-  const main = mergeWithBaseConfig({
-    name: 'app',
-    dependencies: isDevServer ? ['vendor'] : [],
-    entry: {
-      app: [
-        ...(isDevServer
-          ? [
-              `webpack-dev-server/client?http://localhost:${process.env
-                .DEV_PORT}/`,
-            ]
-          : []),
-        './src',
-      ],
-    },
-    output,
-    resolve: {
-      alias: {
-        // Not necessary unless you consume a module using `createClass`
-        // 'create-react-class': 'preact-compat/lib/create-react-class',
-        queries: path.resolve(__dirname, 'src/queries'),
-        fragments: path.resolve(__dirname, 'src/fragments'),
-        mutations: path.resolve(__dirname, 'src/mutations'),
-      },
-    },
-    module: {
-      rules: [
-        {
-          test: /\.(graphql|gql)$/,
-          exclude: /node_modules/,
-          loader: 'graphql-tag/loader',
-        },
-      ],
-    },
-    plugins: [
-      new webpack.EnvironmentPlugin(['API_SPEC_URL']),
-      ...(isDevServer
-        ? [
-            new AddAssetHtmlPlugin([
-              {
-                filepath: path.resolve(
-                  __dirname,
-                  'public/build/vendor.bundle.js',
-                ),
-                includeSourcemap: false,
-              },
-            ]),
-            new webpack.DllReferencePlugin({
-              context: __dirname,
-              manifest: manifestFilePath,
-              name: 'vendor_lib',
-            }),
-          ]
-        : []),
-    ],
-    devServer: {
-      contentBase: './public/',
-      publicPath: '/build/',
-      historyApiFallback: {
-        rewrites: [],
-      },
-    },
-  })
-
-  const html = mergeWithBaseConfig(
-    mergeHtmlFeatureConfig({
-      baseConfig: {
-        name: 'html',
-        dependencies: ['app'],
-        entry: ['./src/htmlStub'],
-        output,
-        plugins: [
-          new HtmlWebpackIncludeAssetsPlugin({
-            assets: [
-              ...(!isDevServer ? ['app.css'] : ['vendor.bundle.js']),
-              'app.js',
-            ],
-            append: true,
-            hash: true,
-          }),
-        ],
-      },
-      fileConfigs: [
-        {
-          filename: '../index.html',
-          template: './src/index.html',
-        },
-      ],
-    }),
-  )
-
-  return [
-    ...(isDevServer
-      ? [
-          mergeWithBaseConfig({
-            name: 'vendor',
-            entry: {
-              vendor,
-            },
-            output: {
-              path: path.resolve(__dirname, 'public/build'),
-              filename: 'vendor.bundle.js',
-              library: 'vendor_lib',
-              publicPath: '/build/',
-            },
-            resolve: {},
-            plugins: [
-              new ForceNodeOutputFileSystemPlugin(),
-              new webpack.DllPlugin({
-                context: __dirname,
-                path: manifestFilePath,
-                name: 'vendor_lib',
-              }),
-            ],
-          }),
-        ]
-      : []),
-    main,
-    html,
-  ]
-}
-
-```
-
-With the configuration above, `./src/index.js` will be used as an entry point of your app.
-
-6) In the project's root directory Create `src` folder and `index.js` file in it with this content 
-
+Content suggestion:
 ```
 import React from 'react'
 import ReactDOM from 'react-dom'
@@ -237,8 +92,9 @@ import ReactDOM from 'react-dom'
 ReactDOM.render(<h1> Hello World </h1>, document.getElementById('root'))
 ```
 
-7) Create `index.html` in the `./src` directory with this content
+7) Create `index.html` in the `./src` directory
 
+Content suggestion:
 ```
 <!DOCTYPE html>
 <html>
@@ -274,11 +130,15 @@ ReactDOM.render(<h1> Hello World </h1>, document.getElementById('root'))
 $ yarn add react react-dom
 ```
 
+we install these dependecies, because we are using them as suggestion in step 6.
+
 9) Install dev-dependencies
 
 ```
 $ yarn add --dev add-asset-html-webpack-plugin babel-plugin-module-resolver html-webpack-include-assets-plugin
 ```
+
+Useful dev-dependecies
 
 10) create empty file called htmlStub.js in ./src directory
 
@@ -295,7 +155,7 @@ DEV_PORT=8080
 $ yarn run dev
 ```
 
-and in your browser view on this address `http://localhost:8080/`
+and in your browser view it on this address `http://localhost:8080/`
 
 You can now continue by replacing the "Hello World" in ./src/index.js by your first react component.
 
