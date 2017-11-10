@@ -12,7 +12,6 @@ module.exports = function(options) {
   } = options
 
   const vendor = Object.keys(require('./package.json').dependencies).filter(
-    // these have to be excluded, because they would throw an error (wrong pathing)
     m => !['client-core', 'addressfield.json'].includes(m),
   )
   const manifestFilePath = path.resolve(__dirname, 'manifest/manifest.json')
