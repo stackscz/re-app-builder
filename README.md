@@ -15,9 +15,7 @@ Babel ES2015 support
 
  ```
     // arrow function
-    const returnsSum = (a,b) => {
-        a + b
-    }
+    const returnsSum = (a,b) => a + b
 ```
 
 autoprefixer,
