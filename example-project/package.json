@@ -1,17 +1,21 @@
 {
- "scripts": {
-  "ab": "node ./node_modules/re-app-builder/bin",
-  "clean": "rm -rf public/build",
-  "dev": "npm run clean && NODE_ENV=development npm run ab dev",
-  "build": "npm run clean && NODE_ENV=development npm run ab build",
-  "build:prod": "npm run clean && NODE_ENV=production npm run ab build"
- },
- "devDependencies": {
-  "re-app-builder": "file:../"
- },
- "dependencies": {
-  "react": "^15.4.2",
-  "react-dom": "^15.4.2",
-  "recompose": "^0.22.0"
- }
+  "scripts": {
+    "ab": "node ./node_modules/re-app-builder",
+    "clean": "rm -rf ./public && rm -rf ./manifest",
+    "dev": "yarn run clean && export $(cat .env.devserver | xargs) && NODE_ENV=development yarn run ab dev",
+    "build:dev": "yarn run clean && NODE_ENV=development yarn run ab build",
+    "build": "yarn run clean && yarn run ab build",
+    "lint": "eslint ./src",
+    "prepush": "yarn run lint"
+  },
+  "devDependencies": {
+    "add-asset-html-webpack-plugin": "^2.1.2",
+    "babel-plugin-module-resolver": "^3.0.0",
+    "html-webpack-include-assets-plugin": "^1.0.2",
+    "re-app-builder": "https://github.com/stackscz/re-app-builder#4f8b9c1423b96154844528681c20fe3ee579741d"
+  },
+  "dependencies": {
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0"
+  }
 }
