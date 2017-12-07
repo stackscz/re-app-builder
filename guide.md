@@ -48,30 +48,7 @@ Content suggestion:
     [
       "module-resolver",
       {
-        "root": ["."],
-        "alias": {
-          "mocks": "./mocks",
-          "i18n": "./src/i18n",
-          "components": "./src/components",
-          "examples": "./src/examples",
-          "decorators": "./src/decorators",
-          "forms": "./src/forms",
-          "form-controls": "./src/form-controls",
-          "form-fields": "./src/form-fields",
-          "fonts": "./src/fonts",
-          "modals": "./src/modals",
-          "modules": "./src/modules",
-          "screens": "./src/screens",
-          "stylesheets": "./src/stylesheets",
-          "utils": "./src/utils",
-          "spec": "./spec",
-          "routesNames": "./src/routesNames.js",
-          "data": "./src/data",
-          "constants": "./src/constants",
-          "fragments": "./src/fragments",
-          "queries": "./src/queries",
-          "mutations": "./src/mutations"
-        }
+        "root": ["."]
       }
     ]
   ]
