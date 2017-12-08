@@ -55,7 +55,7 @@ Content suggestion:
 }
 ```
 
-5) Copy `re-app-builder.config.js` from `example-project` directory (of this git repository) to the project's root directory
+5) Copy [re-app-builder.config.js](example-project/re-app-builder.config.js) to the project's root directory
 
 With this configuration `./src/index.js` will be used as an entry point of your app.
 
