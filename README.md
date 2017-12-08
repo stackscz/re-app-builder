@@ -4,7 +4,7 @@ Preconfigured `webpack` packaged as library.
 Instead of cloning some "boilerplate project", install this as dev dependency and easily start
 your frontend project. 
 
-For a guide on how to properly install read guide.md
+For a guide on how to properly install read [guide.md](guide.md)
 
 ## Includes
 
