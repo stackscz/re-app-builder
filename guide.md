@@ -31,7 +31,7 @@ Content suggestion:
         "dev":
         "yarn run clean && export $(cat .env.devserver | xargs) && NODE_ENV=development yarn run ab dev",
         "build:dev": "yarn run clean && NODE_ENV=development yarn run ab build",
-        "build": "yarn run clean && yarn run ab build",
+        "build": "yarn run clean && NODE_ENV=production npm run ab build",
         "lint": "eslint ./src",
         "prepush": "yarn run lint"
     }
