@@ -10,7 +10,6 @@ const WebpackDevServer = require('webpack-dev-server');
 const webpackMerge = require('webpack-merge');
 const getBaseConfig = require('./getBaseConfig');
 
-process.env.NODE_ENV = process.env.NODE_ENV || 'production';
 
 // parse command
 var argv = require('minimist')(process.argv.slice(2));

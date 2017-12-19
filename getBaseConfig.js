@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const mergeSassFeatureConfig = require('./features/sass');
 const mergeLessFeatureConfig = require('./features/less');
 const mergeCssFeatureConfig = require('./features/css');
@@ -96,14 +97,13 @@ module.exports = ({ projectRootDirectory, isDevServer = false }) => {
 		new webpack.EnvironmentPlugin({ NODE_ENV: 'production' }),
 	];
 
-	if (process.env.NODE_ENV === 'production') {
+	if (process.env.NODE_ENV !== 'development') {
 		plugins.push(
-			new webpack.optimize.UglifyJsPlugin({
-				sourceMap: true,
-				compress: {
-					warnings: true
-				}
-			})
+			new UglifyJsPlugin(
+				{
+					parallel: true,
+				},
+			),
 		);
 		plugins.push(
 			new webpack.optimize.AggressiveMergingPlugin()
