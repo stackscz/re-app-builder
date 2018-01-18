@@ -31,7 +31,7 @@ Content suggestion:
         "dev":
         "yarn run clean && export $(cat .env.devserver | xargs) && NODE_ENV=development yarn run ab dev",
         "build:dev": "yarn run clean && NODE_ENV=development yarn run ab build",
-        "build": "yarn run clean && yarn run ab build",
+        "build": "yarn run clean && NODE_ENV=production npm run ab build",
         "lint": "eslint ./src",
         "prepush": "yarn run lint"
     }
@@ -48,37 +48,14 @@ Content suggestion:
     [
       "module-resolver",
       {
-        "root": ["."],
-        "alias": {
-          "mocks": "./mocks",
-          "i18n": "./src/i18n",
-          "components": "./src/components",
-          "examples": "./src/examples",
-          "decorators": "./src/decorators",
-          "forms": "./src/forms",
-          "form-controls": "./src/form-controls",
-          "form-fields": "./src/form-fields",
-          "fonts": "./src/fonts",
-          "modals": "./src/modals",
-          "modules": "./src/modules",
-          "screens": "./src/screens",
-          "stylesheets": "./src/stylesheets",
-          "utils": "./src/utils",
-          "spec": "./spec",
-          "routesNames": "./src/routesNames.js",
-          "data": "./src/data",
-          "constants": "./src/constants",
-          "fragments": "./src/fragments",
-          "queries": "./src/queries",
-          "mutations": "./src/mutations"
-        }
+        "root": ["."]
       }
     ]
   ]
 }
 ```
 
-5) Copy `re-app-builder.config.js` from `example-project` directory (of this git repository) to the project's root directory
+5) Copy [re-app-builder.config.js](example-project/re-app-builder.config.js) to the project's root directory
 
 With this configuration `./src/index.js` will be used as an entry point of your app.
 

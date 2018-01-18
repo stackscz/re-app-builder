@@ -4,19 +4,13 @@ Preconfigured `webpack` packaged as library.
 Instead of cloning some "boilerplate project", install this as dev dependency and easily start
 your frontend project. 
 
-For a guide on how to properly install read guide.md
+For a guide on how to properly install read [guide.md](guide.md)
 
 ## Includes
 
-CSS, less, sass, image, file loaders
+CSS, less, sass, image, file loaders,
 
-Babel ES2015 support
- - you can use es2015 syntax like arrow functions, new prototype methods and much more... 
-
- ```
-    // arrow function
-    const returnsSum = (a,b) => a + b
-```
+Babel ES2015 support,
 
 autoprefixer,
 
