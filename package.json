@@ -2,6 +2,7 @@
   "name": "re-app-builder",
   "version": "1.0.0",
   "main": "index.js",
+  "bin": "./index.js",
   "author": "Jiri Brabec <brabeji@gmail.com>",
   "license": "MIT",
   "dependencies": {
