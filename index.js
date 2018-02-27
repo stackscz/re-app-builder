@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const isFunction = require('lodash/isFunction');
 const startsWith = require('lodash/startsWith');
 const isArray = require('lodash/isArray');
