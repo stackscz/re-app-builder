@@ -103,7 +103,7 @@ module.exports = ({ projectRootDirectory, isDevServer = false }) => {
 				{
 					parallel: true,
 				},
-			),
+			)
 		);
 		plugins.push(
 			new webpack.optimize.AggressiveMergingPlugin()
