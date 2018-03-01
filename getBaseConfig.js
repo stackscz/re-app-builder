@@ -102,7 +102,7 @@ module.exports = ({ projectRootDirectory, isDevServer = false }) => {
 			new UglifyJsPlugin(
 				{
 					parallel: true,
-				},
+				}
 			)
 		);
 		plugins.push(
