@@ -10,7 +10,7 @@ module.exports = ({ baseConfig, projectRootDirectory, isDevServer }) => {
 		module: {
 			rules: [
 				{
-					test: /\.sass$/,
+					test: /\.s[ac]ss$/,
 					use: ExtractTextPlugin.extract(
 						{
 							use: [
