@@ -97,7 +97,7 @@ switch (command) {
 		compiler.run(
 			(error, stats) => {
 				if (error) {
-					console.log(JSON.stringify(error, null, 2));
+					console.log(error);
 					process.exit(1);
 				}
 				const statsOutputOptions = finalConfig.stats;

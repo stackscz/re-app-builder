@@ -1,7 +1,8 @@
 const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const FailPlugin = require('webpack-fail-plugin');
 const mergeSassFeatureConfig = require('./features/sass');
 const mergeLessFeatureConfig = require('./features/less');
 const mergeCssFeatureConfig = require('./features/css');
@@ -95,6 +96,7 @@ module.exports = ({ projectRootDirectory, isDevServer = false }) => {
 			}
 		),
 		new webpack.EnvironmentPlugin({ NODE_ENV: 'production' }),
+		FailPlugin,
 	];
 
 	if (process.env.NODE_ENV !== 'development') {
@@ -112,6 +114,7 @@ module.exports = ({ projectRootDirectory, isDevServer = false }) => {
 
 	let baseConfig = {
 		devtool: false,
+		bail: true,
 		node: { fs: 'empty' }, // workaround bug in css-loader
 		plugins,
 		stats,

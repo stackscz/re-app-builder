@@ -11,7 +11,7 @@ module.exports = ({ baseConfig, projectRootDirectory, isDevServer, fileConfigs =
 		},
 		plugins: [
 			...fileConfigs.map(
-				(opts) => new HtmlWebpackPlugin(Object.assign(opts, { alwaysWriteToDisk: true }))
+				(opts) => new HtmlWebpackPlugin(Object.assign(opts, { alwaysWriteToDisk: true, excludeChunks: ['main'] }))
 			),
 			new HtmlWebpackHarddiskPlugin()
 		]
