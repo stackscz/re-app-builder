@@ -114,7 +114,6 @@ module.exports = ({ projectRootDirectory, isDevServer = false }) => {
 
 	let baseConfig = {
 		devtool: false,
-		bail: true,
 		node: { fs: 'empty' }, // workaround bug in css-loader
 		plugins,
 		stats,
