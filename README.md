@@ -1,3 +1,5 @@
+# [DEPRECATED] use some mature solution like [https://neutrinojs.org/]()
+
 # `re-app-builder`
 
 Preconfigured `webpack` packaged as library. 
